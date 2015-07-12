@@ -56,8 +56,10 @@ public class GameWindowManager {
 		windowManager.addView(petView, petView.getLayoutParams());
 	}
 	
-	public static void destroy() {
+	public static void destroy(Context context) {
 		petView.end();
+		WindowManager windowManager = getWindowManager(context);
+		windowManager.removeView(petView);
 	}
 	/**
 	 * 创建一个小悬浮窗。初始位置为屏幕的右部中间位置。

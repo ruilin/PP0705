@@ -5,10 +5,19 @@
     tools:context=".MainActivity" >
 
     <Button
-        android:id="@+id/start_float_window"
+        android:id="@+id/show_pet"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Start Float Window" >
+        android:text="show_pet" >
     </Button>
+
+    <Button
+        android:id="@+id/hide_pet"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="49dp"
+        android:text="hide_pet" />
 
 </RelativeLayout>

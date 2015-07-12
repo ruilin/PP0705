@@ -15,8 +15,9 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		Helper.init(this);
 		setContentView(R.layout.activity_main);
-		Button startFloatWindow = (Button) findViewById(R.id.start_float_window);
-		startFloatWindow.setOnClickListener(new OnClickListener() {
+
+		Button btn_showPet = (Button) findViewById(R.id.show_pet);
+		btn_showPet.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
 				Intent intent = new Intent(MainActivity.this, FloatWindowService.class);
@@ -24,6 +25,16 @@ public class MainActivity extends Activity {
 				finish();
 			}
 		});
+		Button btn_hidePet = (Button) findViewById(R.id.hide_pet);
+		btn_hidePet.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				Intent intent = new Intent(MainActivity.this, FloatWindowService.class);
+				stopService(intent);
+				finish();
+			}
+		});
+		
 //		GameWindowManager.createPetView(getApplicationContext());
 	}
 	
