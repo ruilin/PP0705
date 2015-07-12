@@ -38,6 +38,7 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.opengles.GL10;
 
+import com.ryangame.pet.jni.Helper;
 import com.ryangame.pet.view.MainMenu;
 
 import android.content.Context;

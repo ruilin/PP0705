@@ -1,5 +1,7 @@
 package com.ryangame.pet;
 
+import com.ryangame.pet.jni.Helper;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Helper.init(this);
 		setContentView(R.layout.activity_main);
 		Button startFloatWindow = (Button) findViewById(R.id.start_float_window);
 		startFloatWindow.setOnClickListener(new OnClickListener() {
@@ -21,6 +24,7 @@ public class MainActivity extends Activity {
 				finish();
 			}
 		});
+//		GameWindowManager.createPetView(getApplicationContext());
 	}
 	
 	@Override
