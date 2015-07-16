@@ -62,7 +62,6 @@ obj/local/armeabi/objs/petgame/engine/render/render2d/canvas.o: \
  jni/engine/ui/motion_event.h jni/engine/util/linked_list.h \
  jni/engine/ui/ui.h jni/engine/base/debug.h jni/engine/ui/toast.h \
  jni/engine/render/render2d/canvas.h jni/engine/render/render2d/graphic.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES/glext.h \
  jni/engine/ui/view.h jni/engine/util/data/rect.h \
  jni/engine/ui/motion_event.h jni/engine/base/debug.h \
  jni/engine/base/sysinfo.h jni/engine/render/render2d/graphic.h \
@@ -206,8 +205,6 @@ jni/engine/ui/toast.h:
 jni/engine/render/render2d/canvas.h:
 
 jni/engine/render/render2d/graphic.h:
-
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES/glext.h:
 
 jni/engine/ui/view.h:
 

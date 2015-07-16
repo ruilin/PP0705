@@ -37,6 +37,6 @@ PUBLIC void renderer2d_draw(Engine *engine) {
 //	} else {
 //		renderer_drawLoading(engine, engine->g);
 //	}
-	canvas_renderTest();
+	canvas_renderTest(engine->g);
 	return;
 }

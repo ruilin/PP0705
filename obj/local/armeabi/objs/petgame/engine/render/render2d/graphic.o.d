@@ -1,8 +1,8 @@
 obj/local/armeabi/objs/petgame/engine/render/render2d/graphic.o: \
  jni/engine/render/render2d/graphic.c \
  jni/engine/render/render2d/graphic.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES/gl.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES/glplatform.h \
+ E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES2/gl2.h \
+ E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES2/gl2platform.h \
  E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/KHR/khrplatform.h \
  E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/sys/cdefs.h \
  E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/sys/cdefs_elf.h \
@@ -11,7 +11,7 @@ obj/local/armeabi/objs/petgame/engine/render/render2d/graphic.o: \
  E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/sys/_types.h \
  E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/machine/_types.h \
  E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/sys/_wchar_limits.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES/glext.h \
+ E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES2/gl2ext.h \
  jni/engine/base/base.h jni/engine/util/mem.h \
  E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/android/log.h \
  jni/engine/resource/image.h \
@@ -55,9 +55,9 @@ obj/local/armeabi/objs/petgame/engine/render/render2d/graphic.o: \
 
 jni/engine/render/render2d/graphic.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES/gl.h:
+E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES2/gl2.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES/glplatform.h:
+E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES2/gl2platform.h:
 
 E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/KHR/khrplatform.h:
 
@@ -75,7 +75,7 @@ E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/machine
 
 E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/sys/_wchar_limits.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES/glext.h:
+E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES2/gl2ext.h:
 
 jni/engine/base/base.h:
 

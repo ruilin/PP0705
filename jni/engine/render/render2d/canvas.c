@@ -250,6 +250,16 @@ BOOL setupGraphics(int w, int h) {
     return TRUE;
 }
 
+/* 绑定纹理 */
+PUBLIC BOOL canvas_bind_texture(GLuint texId) {
+	if (0 == LastTexId || texId != LastTexId) {
+		glBindTexture(GL_TEXTURE_2D, texId);
+		LastTexId = texId;
+		return TRUE;
+	}
+	return FALSE;
+}
+
 /*******************************************************************/
 #include "image.h"
 PRIVATE Texture *tex;
@@ -259,33 +269,39 @@ PUBLIC void canvas_init(int screenWidth, int screenHeight,
 	LastTexId = 0;
 	setupGraphics(screenWidth, screenHeight);
 	tex = (Texture *)res_newPngPOT("cat.png", IMG_QUALITY_LINEAR);
-	GL_ENABLE_TEXTURE();
-	GLuint textureId;
-	glGenTextures(1, &textureId);
+//	GL_ENABLE_TEXTURE();
+//	GLuint textureId;
+//	glGenTextures(1, &textureId);
+//
+//	glBindTexture(GL_TEXTURE_CUBE_MAP, textureId);
+//
+//	switch (tex->bytesPerPixel) {
+//	case 4:
+//		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->widthPOT, tex->heightPOT, 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid *)(tex->pixels));
+//		break;
+//	case 2:
+//		/* rgb_565 not tested */
+//		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex->widthPOT, tex->heightPOT, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, (GLvoid *)(tex->pixels));
+//		break;
+//	case 1:
+//		glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, tex->widthPOT, tex->heightPOT, 0, GL_ALPHA, GL_UNSIGNED_BYTE, (GLvoid *)(tex->pixels));
+//		break;
+//	default:
+//		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->widthPOT, tex->heightPOT, 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid *)(tex->pixels));
+//		break;
+//	}
+//
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-	glBindTexture(GL_TEXTURE_CUBE_MAP, textureId);
 
-	switch (tex->bytesPerPixel) {
-	case 4:
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->widthPOT, tex->heightPOT, 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid *)(tex->pixels));
-		break;
-	case 2:
-		/* rgb_565 not tested */
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex->widthPOT, tex->heightPOT, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, (GLvoid *)(tex->pixels));
-		break;
-	case 1:
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, tex->widthPOT, tex->heightPOT, 0, GL_ALPHA, GL_UNSIGNED_BYTE, (GLvoid *)(tex->pixels));
-		break;
-	default:
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->widthPOT, tex->heightPOT, 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid *)(tex->pixels));
-		break;
-	}
+    glUseProgram(gProgram);
+    checkGlError("glUseProgram");
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
+    GL_ENABLE_TEXTURE();
+    GLuint texId = graphic_genTexture(engine_get()->g, tex);
 
 //    res_releasePng(tex);
 	return;
@@ -297,7 +313,7 @@ PUBLIC void canvas_end() {
 
 const GLfloat gTriangleVertices[] = { 0.0f, 0.5f, -0.5f, -0.5f, 0.5f, -0.5f };
 
-PUBLIC void canvas_renderTest() {
+PUBLIC void canvas_renderTest(Graphic *g) {
     static float grey;
     grey += 0.01f;
     if (grey > 1.0f) {
@@ -308,8 +324,8 @@ PUBLIC void canvas_renderTest() {
     glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     checkGlError("glClear");
 
-    glUseProgram(gProgram);
-    checkGlError("glUseProgram");
+//    glUseProgram(gProgram);
+//    checkGlError("glUseProgram");
 
 //    glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, gTriangleVertices);
 //    checkGlError("glVertexAttribPointer");

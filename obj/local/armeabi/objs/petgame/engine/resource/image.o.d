@@ -17,6 +17,10 @@ obj/local/armeabi/objs/petgame/engine/resource/image.o: \
  E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/linux/types.h \
  E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/machine/kernel.h \
  E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/sys/sysmacros.h \
+ E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES2/gl2.h \
+ E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES2/gl2platform.h \
+ E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/KHR/khrplatform.h \
+ E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES2/gl2ext.h \
  jni/engine/base/base.h jni/engine/util/mem.h \
  E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/android/log.h \
  jni/engine/java/jni_lib.h \
@@ -82,6 +86,14 @@ E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/linux/t
 E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/machine/kernel.h:
 
 E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/sys/sysmacros.h:
+
+E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES2/gl2.h:
+
+E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES2/gl2platform.h:
+
+E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/KHR/khrplatform.h:
+
+E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES2/gl2ext.h:
 
 jni/engine/base/base.h:
 

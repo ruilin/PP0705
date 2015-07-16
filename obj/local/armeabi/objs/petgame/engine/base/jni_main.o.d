@@ -31,6 +31,9 @@ obj/local/armeabi/objs/petgame/engine/base/jni_main.o: \
  E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/KHR/khrplatform.h \
  jni/engine/resource/image.h \
  E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/stdio.h \
+ E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES2/gl2.h \
+ E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES2/gl2platform.h \
+ E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES2/gl2ext.h \
  jni/engine/java/jni_lib.h \
  E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/android/asset_manager.h \
  E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/android/asset_manager_jni.h \
@@ -59,11 +62,7 @@ obj/local/armeabi/objs/petgame/engine/base/jni_main.o: \
  jni/engine/ui/ui.h jni/engine/base/debug.h jni/engine/ui/toast.h \
  jni/engine/base/engine.h jni/engine/render/render2d/canvas.h \
  E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/math.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES2/gl2.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES2/gl2platform.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES2/gl2ext.h \
  jni/engine/util/data/rect.h jni/engine/render/render2d/graphic.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES/glext.h \
  jni/engine/render/render2d/text.h jni/engine/util/hashmap/hash.h \
  jni/engine/util/hashmap/crc32.h jni/engine/render/render2d/graphic.h \
  jni/engine/ui/view.h jni/engine/ui/motion_event.h \
@@ -145,6 +144,12 @@ jni/engine/resource/image.h:
 
 E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/stdio.h:
 
+E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES2/gl2.h:
+
+E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES2/gl2platform.h:
+
+E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES2/gl2ext.h:
+
 jni/engine/java/jni_lib.h:
 
 E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/android/asset_manager.h:
@@ -211,17 +216,9 @@ jni/engine/render/render2d/canvas.h:
 
 E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/math.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES2/gl2.h:
-
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES2/gl2platform.h:
-
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES2/gl2ext.h:
-
 jni/engine/util/data/rect.h:
 
 jni/engine/render/render2d/graphic.h:
-
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/GLES/glext.h:
 
 jni/engine/render/render2d/text.h:
 

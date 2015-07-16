@@ -46,8 +46,8 @@ public class FloatWindowService extends Service {
 
 	@Override
 	public void onDestroy() {
-		super.onDestroy();
 		GameWindowManager.destroy(getApplicationContext());
+		super.onDestroy();
 		// Service被终止的同时也停止定时器继续运行
 		if (null != timer) {
 			timer.cancel();

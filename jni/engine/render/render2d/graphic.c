@@ -75,24 +75,18 @@ PRIVATE const struct _tex_quality_parameters _TEX_QUALITY_PARAMETERS[] = {
 /*
  * 绑定opengl纹理
  */
-PUBLIC unsigned int graphic_genTexture(Graphic *g, Texture *tex) {
-	if (NULL == g || NULL == tex) {
-		LOGE("graphic_genTexture() NULL == g || NULL == tex");
-		return -1;
-	}
-	if (TRUE == tex->isBinded) {
-		goto _exit;
-	}
+PUBLIC GLuint graphic_genTexture(Graphic *g, Texture *tex) {
+//	if (NULL == g || NULL == tex) {
+//		LOGE("graphic_genTexture() NULL == g || NULL == tex");
+//		return -1;
+//	}
+//	if (TRUE == tex->isBinded) {
+//		goto _exit;
+//	}
 	tex->isBinded = TRUE;
 	glGenTextures(1, &(tex->texId));
-//	canvas_bind_texture(tex->texId);
+	glBindTexture(GL_TEXTURE_2D, tex->texId);
 	hash_set(g->hash_tex, tex, sizeof(tex), tex->texId, NULL);
-
-	/* 设置纹理参数 */
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _TEX_QUALITY_PARAMETERS[tex->quality].minFilter);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _TEX_QUALITY_PARAMETERS[tex->quality].magFilter);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _TEX_QUALITY_PARAMETERS[tex->quality].wrapModeS);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _TEX_QUALITY_PARAMETERS[tex->quality].wrapModeT);
 
 	switch (tex->bytesPerPixel) {
 	case 4:
@@ -109,6 +103,11 @@ PUBLIC unsigned int graphic_genTexture(Graphic *g, Texture *tex) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->widthPOT, tex->heightPOT, 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid *)(tex->pixels));
 		break;
 	}
+	/* 设置纹理参数 */
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _TEX_QUALITY_PARAMETERS[tex->quality].minFilter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _TEX_QUALITY_PARAMETERS[tex->quality].magFilter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _TEX_QUALITY_PARAMETERS[tex->quality].wrapModeS);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _TEX_QUALITY_PARAMETERS[tex->quality].wrapModeT);
 	image_setCallBackFun(tex, graphic_recyleTexture, g);
 _exit:
 	return tex->texId;

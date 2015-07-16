@@ -10,6 +10,8 @@
 
 
 #include <stdio.h>
+#include <GLES2/gl2.h>
+#include <GLES2/gl2ext.h>
 #include <base.h>
 #include <jni_lib.h>
 #include "../ext/libpng/png.h"
@@ -31,7 +33,7 @@ typedef enum {
 typedef void (*CALLBACK_FUN_DELETE_BIND)(void *graphic, void *tex);
 
 typedef struct Image {
-	unsigned int texId;
+	GLuint texId;
 	char filePath[128];
 	IMG_TYPE type;
 	CALLBACK_FUN_DELETE_BIND callback_deleteBind;
