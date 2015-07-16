@@ -67,7 +67,7 @@ obj/local/armeabi/objs/petgame/engine/render/render2d/canvas.o: \
  jni/engine/ui/motion_event.h jni/engine/base/debug.h \
  jni/engine/base/sysinfo.h jni/engine/render/render2d/graphic.h \
  jni/engine/render/render2d/text.h jni/engine/util/hashmap/hash.h \
- jni/engine/util/hashmap/crc32.h
+ jni/engine/util/hashmap/crc32.h jni/engine/resource/image.h
 
 jni/engine/render/render2d/canvas.h:
 
@@ -226,3 +226,5 @@ jni/engine/render/render2d/text.h:
 jni/engine/util/hashmap/hash.h:
 
 jni/engine/util/hashmap/crc32.h:
+
+jni/engine/resource/image.h:

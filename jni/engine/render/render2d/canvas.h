@@ -31,5 +31,6 @@ typedef enum {
 
 void canvas_init(int screenWidth, int screenHeight,
 				unsigned short canvasWidth, unsigned short canvasHeight);
+void canvas_renderTest();
 
 #endif /* CANVAS_H_ */

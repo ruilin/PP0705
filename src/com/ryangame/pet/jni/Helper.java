@@ -2,13 +2,12 @@ package com.ryangame.pet.jni;
 
 import java.io.IOException;
 
-import com.ryangame.pet.AppContext;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -18,6 +17,8 @@ import android.graphics.Paint.FontMetrics;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
+
+import com.ryangame.pet.AppContext;
 
 public class Helper {
 	private static Canvas mCanvas = null;
@@ -47,6 +48,10 @@ public class Helper {
     	Bitmap bmp = null;
     	bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
     	return bmp;
+    }
+    
+    public static AssetManager getAssetManager() {
+     	return mApp.getAssets();
     }
     
     private final static byte TEXT_STYLE_FILL				= 0;

@@ -19,6 +19,7 @@
 
 //#include <EGL/egl.h>
 //#include <GLES/gl.h>
+#define JAVA_HELPER_PATH		"com/ryangame/pet/jni/Helper"
 
 #include "jni_lib.h"
 /* This is a trivial JNI example where we use a native method
@@ -40,7 +41,7 @@ PUBLIC JNIEnv *jni_lib_getEnv() {
 }
 
 PRIVATE jobject _jni_lib_getJavaAssetManager(JNIEnv* env) {
-	jclass cls = (*env)->FindClass(env,"com/example/hellojni/HelloJni");
+	jclass cls = (*env)->FindClass(env, JAVA_HELPER_PATH);
 	if (NULL == cls) {
 		LOGE("_jni_lib_getJavaAssetManager() NULL == cls");
 		return NULL;
@@ -67,7 +68,7 @@ PUBLIC void jni_lib_init(JNIEnv* env) {
 	  LOGE("jni_lib_init() AAssetManager==NULL");
 	  return;
 	}
-	Jni_lib.javaLibCls = (*Jni_lib.env)->FindClass(Jni_lib.env,"com/ugame/help/Helper");
+	Jni_lib.javaLibCls = (*Jni_lib.env)->FindClass(Jni_lib.env,JAVA_HELPER_PATH);
 	if (NULL == Jni_lib.javaLibCls) {
 		LOGE("jni_lib_init() NULL == javaLibCls");
 		return;

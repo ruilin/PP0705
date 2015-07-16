@@ -35,15 +35,27 @@ static void checkGlError(const char* op) {
 }
 
 static const char gVertexShader[] =
+	"attribute vec4 a_color;\n"
+	"varying vec4 v_color;\n"
+
     "attribute vec4 vPosition;\n"
+	"attribute vec2 a_coord;\n"
+	"varying vec2 v_coord;\n"
     "void main() {\n"
+	"  v_color = a_color;\n"
     "  gl_Position = vPosition;\n"
+	"  v_coord = a_coord;"
     "}\n";
 
 static const char gFragmentShader[] =
+	"varying vec4 v_color;\n"
     "precision mediump float;\n"
+	"varying vec2 v_coord;\n"
+	"uniform sampler2D s_texture;\n"
     "void main() {\n"
-    "  gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n"
+//    "  gl_FragColor = v_color * texture2D(s_texture, v_coord);\n"
+	"  gl_FragColor = texture2D(s_texture, v_coord);\n"
+//	"  gl_FragColor = v_color;\n"
     "}\n";
 
 GLuint loadShader(GLenum shaderType, const char* pSource) {
@@ -112,6 +124,29 @@ GLuint createProgram(const char* pVertexSource, const char* pFragmentSource) {
 
 GLuint gProgram;
 GLuint gvPositionHandle;
+GLuint gvColorHandle;
+
+float vertercies[] =  { -1, -1,
+						  1, -1,
+						 -1,  1,
+						 -1,  1,
+						  1,  1,
+						  1, -1
+						};
+
+GLfloat vcolor[] = { 0, 1, 0, 1,    //第一个点的颜色，绿色
+                     1, 0, 0, 1,  	//第二个点的颜色, 红色
+                     0, 0, 1, 1,	//第三个点的颜色， 蓝色
+                     0, 1, 1, 1,
+                     0, 0, 1, 1,
+                     0, 0, 1, 1,
+					};
+//为两个三角形指定索引数据
+GLubyte indices[] = {
+						0,1,2,  //第一个三角形索引
+						2,3,1 	//第二个三角形索引
+					};
+
 
 BOOL setupGraphics(int w, int h) {
     printGLString("Version", GL_VERSION);
@@ -125,6 +160,7 @@ BOOL setupGraphics(int w, int h) {
         LOGE("Could not create program.");
         return FALSE;
     }
+    gvColorHandle = glGetAttribLocation(gProgram, "a_color");
     gvPositionHandle = glGetAttribLocation(gProgram, "vPosition");
     checkGlError("glGetAttribLocation");
     LOGI("glGetAttribLocation(\"vPosition\") = %d\n",
@@ -132,17 +168,134 @@ BOOL setupGraphics(int w, int h) {
 
     glViewport(0, 0, w, h);
     checkGlError("glViewport");
+
+
+
+    /*-- VBO --*/
+    GLuint vbo[2];
+    glGenBuffers(2, vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertercies), vertercies, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(gvPositionHandle);
+    glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vcolor), vcolor, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(gvColorHandle);
+    glVertexAttribPointer(gvColorHandle, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
+
+//    GLuint vbo;
+//    glGenBuffers(1, &vbo);
+//    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+//    GLfloat vcolor[] = { 0, 1, 0, 1,    //第一个点的颜色，绿色
+//                         1, 0, 0, 1,  	//第二个点的颜色, 红色
+//                         0, 0, 1, 1 };  //第三个点的颜色， 蓝色
+//    glBufferData(GL_ARRAY_BUFFER, sizeof(vcolor), vcolor, GL_STATIC_DRAW);
+//    glEnableVertexAttribArray(gvColorHandle);
+//    glVertexAttribPointer(gvColorHandle, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
+
+
+//    GLuint vertexVBO;
+//    glGenBuffers(1, &vertexVBO);
+//	glBindBuffer(GL_ARRAY_BUFFER, vertexVBO);
+//	float vertercies[] =
+//	          {-1, -1,
+//	        	1, -1,
+//	           -1,  1,
+//	            1,  1};
+//	glBufferData(GL_ARRAY_BUFFER, sizeof(vertercies), vertercies, GL_STATIC_DRAW);
+//	glEnableVertexAttribArray(gvPositionHandle);
+//	glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
+
+    /* 指定索引数据，才可以用 glDrawElements() 绘制；使用 glDrawArrays() 则不需要 */
+//    GLuint indexVBO;
+//    glGenBuffers(1, &indexVBO);
+//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexVBO);
+//	GLubyte indices[] = {
+//							0,1,2,  //第一个三角形索引
+//							2,3,1 	//第二个三角形索引
+//						};
+//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
     return TRUE;
 }
 
 /*******************************************************************/
+#include "image.h"
+PRIVATE Texture *tex;
+
+typedef struct {
+	float Position[2];
+	float Color[4];
+	float TexCoord[2];
+} Vertex;
+
+Vertex texVerData[] =
+{
+	{{-1,-1},{0,1,0,1},{0,1}},
+	{{1,-1},{0,1,0,1},{1,1}},
+	{{-1,1},{0,1,0,1},{0,0}},
+	{{1,1},{0,1,0,1},{1,0}}
+};
 
 PUBLIC void canvas_init(int screenWidth, int screenHeight,
 						unsigned short canvasWidth, unsigned short canvasHeight) {
 	LastTexId = 0;
 	setupGraphics(screenWidth, screenHeight);
-	GL_DISABLE_TEXTURE();
+	tex = (Texture *)res_newPngPOT("cat.png", IMG_QUALITY_LINEAR);
+	GL_ENABLE_TEXTURE();
+	GLuint textureId;
+	glGenTextures(1, &textureId);
+
+	glBindTexture(GL_TEXTURE_CUBE_MAP, textureId);
+
+    glTexImage2D(GL_TEXTURE_2D,
+                 0,
+                 GL_RGB,
+                 tex->widthPOT,
+                 tex->heightPOT,
+                 0,
+                 GL_RGB,
+                 GL_UNSIGNED_BYTE,//must be GL_UNSIGNED_BYTE
+                 tex->pixels);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,  GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+//    res_releasePng(tex);
 	return;
+}
+
+PUBLIC void canvas_end() {
+	res_releasePng(tex);
+}
+
+const GLfloat gTriangleVertices[] = { 0.0f, 0.5f, -0.5f, -0.5f,
+        0.5f, -0.5f };
+
+PUBLIC void canvas_renderTest() {
+    static float grey;
+    grey += 0.01f;
+    if (grey > 1.0f) {
+        grey = 0.0f;
+    }
+    glClearColor(grey, grey, grey, 1.0f);
+    checkGlError("glClearColor");
+    glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+    checkGlError("glClear");
+
+    glUseProgram(gProgram);
+    checkGlError("glUseProgram");
+
+//    glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, gTriangleVertices);
+//    checkGlError("glVertexAttribPointer");
+//    glEnableVertexAttribArray(gvPositionHandle);
+//    checkGlError("glEnableVertexAttribArray");
+//    glDrawArrays(GL_TRIANGLES, 0, 3);
+//    checkGlError("glDrawArrays");
+
+//    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE,(GLvoid*)0);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
 

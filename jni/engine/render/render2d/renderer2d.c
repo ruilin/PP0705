@@ -10,11 +10,13 @@
 
 PUBLIC void renderer2d_init(Engine *engine) {
 	text_init();
+	canvas_init(engine->screenWidth, engine->screenWidth, engine->screenWidth, engine->screenWidth);
 //	renderer_init(engine);
 	return;
 }
 
 PUBLIC void renderer2d_end(Engine *engine) {
+	canvas_end();
 //	renderer_end(engine);
 	text_end();
 	return;
@@ -35,5 +37,6 @@ PUBLIC void renderer2d_draw(Engine *engine) {
 //	} else {
 //		renderer_drawLoading(engine, engine->g);
 //	}
+	canvas_renderTest();
 	return;
 }

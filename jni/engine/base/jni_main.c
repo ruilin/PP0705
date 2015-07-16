@@ -8,9 +8,9 @@
 
 #include "jni_main.h"
 
-#define JAVA_PACKAGE_PATH_PATFORM			"com/ugame/data/Platform"
-#define JAVA_PACKAGE_PATH_INPUTEVENT		"com/ugame/data/InputEvent"
-#define JAVA_PACKAGE_PATH_INPUTEVENT_ARRAY	"[Lcom/ugame/data/InputEvent;"
+#define JAVA_PACKAGE_PATH_PATFORM			"com/ryangame/pet/gl/Platform"
+#define JAVA_PACKAGE_PATH_INPUTEVENT		"com/ryangame/pet/gl/InputEvent"
+#define JAVA_PACKAGE_PATH_INPUTEVENT_ARRAY	"[Lcom/ryangame/pet/gl/InputEvent;"
 
 PRIVATE BOOL is2DMode;
 PRIVATE unsigned long long stime = 0;
@@ -81,11 +81,11 @@ PRIVATE void _updateToNativeC(JNIEnv *env, jobject platformObj) {
     }
 }
 
-JNIEXPORT void JNICALL Java_com_example_hellojni_OpenGlJniLib_createWorld(JNIEnv * env, jobject obj) {
+JNIEXPORT void JNICALL Java_com_ryangame_pet_gl_GL2JNILib_createWorld(JNIEnv * env, jobject obj) {
 	return;
 }
 
-JNIEXPORT void JNICALL Java_com_example_hellojni_OpenGlJniLib_create(JNIEnv * env, jobject obj) {
+JNIEXPORT void JNICALL Java_com_ryangame_pet_gl_GL2JNILib_create(JNIEnv * env, jobject obj) {
 	is2DMode = TRUE;
 	engine = engine_init(env);
 	engine->state = 99;
@@ -94,7 +94,7 @@ JNIEXPORT void JNICALL Java_com_example_hellojni_OpenGlJniLib_create(JNIEnv * en
 	return;
 }
 
-JNIEXPORT jobject JNICALL Java_com_example_hellojni_OpenGlJniLib_init(JNIEnv * env, jobject obj, jobject platformObj,
+JNIEXPORT jobject JNICALL Java_com_ryangame_pet_gl_GL2JNILib_init(JNIEnv * env, jobject obj, jobject platformObj,
 																		jint width, jint height) {
 	engine->screenWidth = width;
 	engine->screenHeight = height;
@@ -111,7 +111,7 @@ JNIEXPORT jobject JNICALL Java_com_example_hellojni_OpenGlJniLib_init(JNIEnv * e
     return platformObj;
 }
 
-JNIEXPORT jobject JNICALL Java_com_example_hellojni_OpenGlJniLib_step(JNIEnv * env, jobject obj, jobject platformObj) {
+JNIEXPORT jobject JNICALL Java_com_ryangame_pet_gl_GL2JNILib_step(JNIEnv * env, jobject obj, jobject platformObj) {
 	engine->gametime = time_util_now_ms();
 	_updateToNativeC(env, platformObj);
 	runnable_run(engine);
@@ -132,7 +132,7 @@ JNIEXPORT jobject JNICALL Java_com_example_hellojni_OpenGlJniLib_step(JNIEnv * e
 	 return platformObj;
 }
 
-JNIEXPORT void JNICALL Java_com_example_hellojni_OpenGlJniLib_destroy(JNIEnv *env, jobject obj, jobject platformObj) {
+JNIEXPORT void JNICALL Java_com_ryangame_pet_gl_GL2JNILib_destroy(JNIEnv *env, jobject obj, jobject platformObj) {
 	renderer2d_end(engine);
 	runnable_end(engine);
 	linked_list_destroy(engine->linked_event);
@@ -141,7 +141,7 @@ JNIEXPORT void JNICALL Java_com_example_hellojni_OpenGlJniLib_destroy(JNIEnv *en
 	return;
 }
 
-JNIEXPORT jobject JNICALL Java_com_example_hellojni_OpenGlJniLib_getGlobalData(JNIEnv *env, jobject obj, jobject platformObj) {
+JNIEXPORT jobject JNICALL Java_com_ryangame_pet_gl_GL2JNILib_getGlobalData(JNIEnv *env, jobject obj, jobject platformObj) {
     jclass objectClass = (*env)->FindClass(env, JAVA_PACKAGE_PATH_PATFORM);
     jfieldID state = (*env)->GetFieldID(env, objectClass,"state","I");
     (*env)->SetIntField(env, platformObj, state, engine->state);

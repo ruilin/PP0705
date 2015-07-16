@@ -32,23 +32,23 @@ package com.ryangame.pet.gl;
  */
 
 
+import java.util.ArrayList;
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.opengles.GL10;
-
-import com.ryangame.pet.jni.Helper;
-import com.ryangame.pet.view.MainMenu;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import com.ryangame.pet.view.MainMenu;
 
 /**
  * A simple GLSurfaceView sub-class that demonstrate how to perform
@@ -128,12 +128,30 @@ public class PetView extends GLSurfaceView {
 
         /* Set the renderer responsible for frame rendering */
         renderer = new Renderer();
+        renderer.createWorld();
         setRenderer(renderer);
     }
     
     public void end() {
-    	GL2JNILib.destroyWorld();
+//    	GL2JNILib.destroyWorld();
+    	renderer.destroyWorld();
     }
+    
+	@SuppressLint("ClickableViewAccessibility")
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		if (event.getPointerCount() > 0) {
+			InputEvent inputEvent = InputEvent.getInstance(event.getPointerCount());
+			for (int i = 0; i < event.getPointerCount(); i++) {
+				inputEvent.pointers[i][0] = event.getAction();
+				inputEvent.pointers[i][1] = (int) event.getX(i);
+				inputEvent.pointers[i][2] = (int) event.getY(i);
+			}
+			renderer.addEvent(inputEvent);
+			return true;
+		}
+		return false;
+	}
 
     private static class ContextFactory implements GLSurfaceView.EGLContextFactory {
         private static int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
@@ -352,17 +370,47 @@ public class PetView extends GLSurfaceView {
     }
 
     private static class Renderer implements GLSurfaceView.Renderer {
+    	private final static InputEvent[] INPUT_EVENT_TYPE = new InputEvent[0];
+    	private ArrayList<InputEvent> events = new ArrayList<InputEvent>();
+    	
+    	public Platform globalData;
+    	
+    	public Renderer() {
+    		globalData = new Platform();
+    	}
+    	
+    	public void createWorld() {
+    		GL2JNILib.createWorld();
+    	}
+    	
+    	public void destroyWorld() {
+    		GL2JNILib.destroy(globalData);
+    	}
+    	
+    	public void addEvent(InputEvent pointers) {
+    		events.add(pointers);
+    	}
+    	
         public void onDrawFrame(GL10 gl) {
-            GL2JNILib.step();
+    		if (0 < events.size()) {
+    			globalData.inputs = new InputEvent[events.size()];
+    			globalData.inputs = events.toArray(INPUT_EVENT_TYPE);
+    			events.clear();
+    		} else {
+    			globalData.inputs = null;
+    		}
+            GL2JNILib.step(globalData);
         }
         
         /* 横竖屏切换时 */
         public void onSurfaceChanged(GL10 gl, int width, int height) {
-            GL2JNILib.init(width, height);
+//            GL2JNILib.init(width, height);
+            GL2JNILib.init(globalData, width, height);
         }
 
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
             // Do nothing.
+        	GL2JNILib.create();
         }
     }
 }
