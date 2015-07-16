@@ -125,6 +125,7 @@ GLuint createProgram(const char* pVertexSource, const char* pFragmentSource) {
 GLuint gProgram;
 GLuint gvPositionHandle;
 GLuint gvColorHandle;
+GLuint gvCoordHandle;
 
 float vertercies[] =  { -1, -1,
 						  1, -1,
@@ -147,6 +148,19 @@ GLubyte indices[] = {
 						2,3,1 	//第二个三角形索引
 					};
 
+typedef struct {
+	float Position[2];
+	float Color[4];
+	float TexCoord[2];
+} Vertex;
+
+Vertex texVerData[] =
+{
+	{{-1,-1},{0,1,0,1},{0,1}},
+	{{1,-1},{0,1,0,1},{1,1}},
+	{{-1,1},{0,1,0,1},{0,0}},
+	{{1,1},{0,1,0,1},{1,0}}
+};
 
 BOOL setupGraphics(int w, int h) {
     printGLString("Version", GL_VERSION);
@@ -162,6 +176,7 @@ BOOL setupGraphics(int w, int h) {
     }
     gvColorHandle = glGetAttribLocation(gProgram, "a_color");
     gvPositionHandle = glGetAttribLocation(gProgram, "vPosition");
+    gvCoordHandle = glGetAttribLocation(gProgram, "a_coord");
     checkGlError("glGetAttribLocation");
     LOGI("glGetAttribLocation(\"vPosition\") = %d\n",
             gvPositionHandle);
@@ -172,17 +187,32 @@ BOOL setupGraphics(int w, int h) {
 
 
     /*-- VBO --*/
-    GLuint vbo[2];
-    glGenBuffers(2, vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertercies), vertercies, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(gvPositionHandle);
-    glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
+//    GLuint vbo[2];
+//    glGenBuffers(2, vbo);
+//    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+//    glBufferData(GL_ARRAY_BUFFER, sizeof(vertercies), vertercies, GL_STATIC_DRAW);
+//    glEnableVertexAttribArray(gvPositionHandle);
+//    glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
+//
+//    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+//    glBufferData(GL_ARRAY_BUFFER, sizeof(vcolor), vcolor, GL_STATIC_DRAW);
+//    glEnableVertexAttribArray(gvColorHandle);
+//    glVertexAttribPointer(gvColorHandle, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
 
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vcolor), vcolor, GL_STATIC_DRAW);
+    GLuint vbo[1];
+    glGenBuffers(1, vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(texVerData), texVerData, GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(gvPositionHandle);
+    glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (GLvoid *)0);
+
     glEnableVertexAttribArray(gvColorHandle);
-    glVertexAttribPointer(gvColorHandle, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
+    glVertexAttribPointer(gvColorHandle, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (GLvoid *)(sizeof(float) * 2));
+
+    glEnableVertexAttribArray(gvCoordHandle);
+    glVertexAttribPointer(gvCoordHandle, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (GLvoid *)(sizeof(float) * 6));
+    /*glVertexAttribPointer(gvColorHandle, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 7, (GLvoid *)(sizeof(float) * 3));*/
 
 //    GLuint vbo;
 //    glGenBuffers(1, &vbo);
@@ -208,14 +238,14 @@ BOOL setupGraphics(int w, int h) {
 //	glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
 
     /* 指定索引数据，才可以用 glDrawElements() 绘制；使用 glDrawArrays() 则不需要 */
-//    GLuint indexVBO;
-//    glGenBuffers(1, &indexVBO);
-//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexVBO);
-//	GLubyte indices[] = {
-//							0,1,2,  //第一个三角形索引
-//							2,3,1 	//第二个三角形索引
-//						};
-//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    GLuint indexVBO;
+    glGenBuffers(1, &indexVBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexVBO);
+	GLubyte indices[] = {
+							0,1,2,  //第一个三角形索引
+							2,3,1 	//第二个三角形索引
+						};
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     return TRUE;
 }
@@ -223,20 +253,6 @@ BOOL setupGraphics(int w, int h) {
 /*******************************************************************/
 #include "image.h"
 PRIVATE Texture *tex;
-
-typedef struct {
-	float Position[2];
-	float Color[4];
-	float TexCoord[2];
-} Vertex;
-
-Vertex texVerData[] =
-{
-	{{-1,-1},{0,1,0,1},{0,1}},
-	{{1,-1},{0,1,0,1},{1,1}},
-	{{-1,1},{0,1,0,1},{0,0}},
-	{{1,1},{0,1,0,1},{1,0}}
-};
 
 PUBLIC void canvas_init(int screenWidth, int screenHeight,
 						unsigned short canvasWidth, unsigned short canvasHeight) {
@@ -249,19 +265,28 @@ PUBLIC void canvas_init(int screenWidth, int screenHeight,
 
 	glBindTexture(GL_TEXTURE_CUBE_MAP, textureId);
 
-    glTexImage2D(GL_TEXTURE_2D,
-                 0,
-                 GL_RGB,
-                 tex->widthPOT,
-                 tex->heightPOT,
-                 0,
-                 GL_RGB,
-                 GL_UNSIGNED_BYTE,//must be GL_UNSIGNED_BYTE
-                 tex->pixels);
+	switch (tex->bytesPerPixel) {
+	case 4:
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->widthPOT, tex->heightPOT, 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid *)(tex->pixels));
+		break;
+	case 2:
+		/* rgb_565 not tested */
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex->widthPOT, tex->heightPOT, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, (GLvoid *)(tex->pixels));
+		break;
+	case 1:
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, tex->widthPOT, tex->heightPOT, 0, GL_ALPHA, GL_UNSIGNED_BYTE, (GLvoid *)(tex->pixels));
+		break;
+	default:
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->widthPOT, tex->heightPOT, 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid *)(tex->pixels));
+		break;
+	}
+
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,  GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+
 //    res_releasePng(tex);
 	return;
 }
@@ -270,8 +295,7 @@ PUBLIC void canvas_end() {
 	res_releasePng(tex);
 }
 
-const GLfloat gTriangleVertices[] = { 0.0f, 0.5f, -0.5f, -0.5f,
-        0.5f, -0.5f };
+const GLfloat gTriangleVertices[] = { 0.0f, 0.5f, -0.5f, -0.5f, 0.5f, -0.5f };
 
 PUBLIC void canvas_renderTest() {
     static float grey;
@@ -294,8 +318,8 @@ PUBLIC void canvas_renderTest() {
 //    glDrawArrays(GL_TRIANGLES, 0, 3);
 //    checkGlError("glDrawArrays");
 
-//    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE,(GLvoid*)0);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, (GLvoid *)0);
+//    glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
 
