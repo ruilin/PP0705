@@ -53,8 +53,8 @@ static const char gFragmentShader[] =
 	"varying vec2 v_coord;\n"
 	"uniform sampler2D s_texture;\n"
     "void main() {\n"
-//    "  gl_FragColor = v_color * texture2D(s_texture, v_coord);\n"
-	"  gl_FragColor = texture2D(s_texture, v_coord);\n"
+    "  gl_FragColor = v_color * texture2D(s_texture, v_coord);\n"
+//	"  gl_FragColor = texture2D(s_texture, v_coord);\n"
 //	"  gl_FragColor = v_color;\n"
     "}\n";
 
@@ -156,10 +156,10 @@ typedef struct {
 
 Vertex texVerData[] =
 {
-	{{-1,-1},{0,1,0,1},{0,1}},
-	{{1,-1},{0,1,0,1},{1,1}},
-	{{-1,1},{0,1,0,1},{0,0}},
-	{{1,1},{0,1,0,1},{1,0}}
+	{{-1,-1},{1,1,1,1},{0,1}},
+	{{1,-1},{1,1,1,1},{1,1}},
+	{{-1,1},{1,1,1,1},{0,0}},
+	{{1,1},{1,1,1,1},{1,0}}
 };
 
 BOOL setupGraphics(int w, int h) {
@@ -174,8 +174,8 @@ BOOL setupGraphics(int w, int h) {
         LOGE("Could not create program.");
         return FALSE;
     }
-    gvColorHandle = glGetAttribLocation(gProgram, "a_color");
     gvPositionHandle = glGetAttribLocation(gProgram, "vPosition");
+    gvColorHandle = glGetAttribLocation(gProgram, "a_color");
     gvCoordHandle = glGetAttribLocation(gProgram, "a_coord");
     checkGlError("glGetAttribLocation");
     LOGI("glGetAttribLocation(\"vPosition\") = %d\n",
@@ -184,6 +184,13 @@ BOOL setupGraphics(int w, int h) {
     glViewport(0, 0, w, h);
     checkGlError("glViewport");
 
+    /* 开启 alpha blend：支持贴图背景透明 */
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    /*
+     * glBlendFunc(GL_ONE, GL_ONE);		// 即源与目标颜色的RGBA分别相加，效果类似PS的正片叠底
+     * glBlendFunc(GL_ONE, GL_ZERO); 	// 即只取源颜色，这也是默认值
+     */
 
 
     /*-- VBO --*/
@@ -314,15 +321,15 @@ PUBLIC void canvas_end() {
 const GLfloat gTriangleVertices[] = { 0.0f, 0.5f, -0.5f, -0.5f, 0.5f, -0.5f };
 
 PUBLIC void canvas_renderTest(Graphic *g) {
-    static float grey;
-    grey += 0.01f;
-    if (grey > 1.0f) {
-        grey = 0.0f;
-    }
-    glClearColor(grey, grey, grey, 1.0f);
-    checkGlError("glClearColor");
-    glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-    checkGlError("glClear");
+//    static float grey;
+//    grey += 0.01f;
+//    if (grey > 1.0f) {
+//        grey = 0.0f;
+//    }
+//    glClearColor(grey, grey, grey, 1.0f);
+//    checkGlError("glClearColor");
+//    glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+//    checkGlError("glClear");
 
 //    glUseProgram(gProgram);
 //    checkGlError("glUseProgram");

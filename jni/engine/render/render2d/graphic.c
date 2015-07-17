@@ -76,13 +76,13 @@ PRIVATE const struct _tex_quality_parameters _TEX_QUALITY_PARAMETERS[] = {
  * 绑定opengl纹理
  */
 PUBLIC GLuint graphic_genTexture(Graphic *g, Texture *tex) {
-//	if (NULL == g || NULL == tex) {
-//		LOGE("graphic_genTexture() NULL == g || NULL == tex");
-//		return -1;
-//	}
-//	if (TRUE == tex->isBinded) {
-//		goto _exit;
-//	}
+	if (NULL == g || NULL == tex) {
+		LOGE("graphic_genTexture() NULL == g || NULL == tex");
+		return -1;
+	}
+	if (TRUE == tex->isBinded) {
+		goto _exit;
+	}
 	tex->isBinded = TRUE;
 	glGenTextures(1, &(tex->texId));
 	glBindTexture(GL_TEXTURE_2D, tex->texId);
