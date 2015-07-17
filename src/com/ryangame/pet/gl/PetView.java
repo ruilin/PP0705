@@ -86,18 +86,19 @@ public class PetView extends GLSurfaceView {
 		int screenHeight = dm.heightPixels;
 		if (layoutParams == null) {
 			layoutParams = new LayoutParams();
-			layoutParams.x = (screenWidth - MainMenu.viewWidth) >> 1;
-			layoutParams.y = (screenHeight - MainMenu.viewHeight) >> 1;
 			layoutParams.type = LayoutParams.TYPE_PHONE;
 			layoutParams.format = PixelFormat.RGBA_8888;
 			layoutParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL
 					| LayoutParams.FLAG_NOT_FOCUSABLE;
+			layoutParams.x = (screenWidth - MainMenu.viewWidth) >> 1;
+			layoutParams.y = (screenHeight - MainMenu.viewHeight) >> 1;
 			layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
 			layoutParams.width = MainMenu.viewWidth;
 			layoutParams.height = MainMenu.viewHeight;
 		}
 		this.setLayoutParams(layoutParams);
-        init(false, 0, 0);
+        init(true, 16, 0);
+//		init(false, 0, 0);
     }
 
     private void init(boolean translucent, int depth, int stencil) {
@@ -108,6 +109,7 @@ public class PetView extends GLSurfaceView {
          * is interpreted as any 32-bit surface with alpha by SurfaceFlinger.
          */
         if (translucent) {
+        	/*this.setZOrderOnTop(true);*/
             this.getHolder().setFormat(PixelFormat.TRANSLUCENT);
         }
 

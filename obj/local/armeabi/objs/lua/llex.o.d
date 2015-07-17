@@ -1,33 +1,33 @@
 obj/local/armeabi/objs/lua/llex.o: jni/engine/ext/liblua/llex.c \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/ctype.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/sys/cdefs.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/sys/cdefs_elf.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/android/api-level.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/locale.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/string.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/malloc.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/ctype.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/cdefs.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/cdefs_elf.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/android/api-level.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/locale.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/string.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/malloc.h \
  jni/engine/ext/liblua/lua.h jni/engine/ext/liblua/luaconf.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/limits.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/sys/limits.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/linux/limits.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/machine/internal_types.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/machine/limits.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/sys/syslimits.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/asm/page.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/math.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/sys/types.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/stdint.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/sys/_types.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/machine/_types.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/sys/_wchar_limits.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/linux/posix_types.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/linux/stddef.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/linux/compiler.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/asm/posix_types.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/asm/types.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/linux/types.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/machine/kernel.h \
- E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/sys/sysmacros.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/limits.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/limits.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/linux/limits.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/machine/internal_types.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/machine/limits.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/syslimits.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/asm/page.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/math.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/types.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/stdint.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/_types.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/machine/_types.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/_wchar_limits.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/linux/posix_types.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/linux/stddef.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/linux/compiler.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/asm/posix_types.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/asm/types.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/linux/types.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/machine/kernel.h \
+ D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/sysmacros.h \
  jni/engine/ext/liblua/ldo.h jni/engine/ext/liblua/lobject.h \
  jni/engine/ext/liblua/llimits.h jni/engine/ext/liblua/lstate.h \
  jni/engine/ext/liblua/ltm.h jni/engine/ext/liblua/lzio.h \
@@ -35,65 +35,65 @@ obj/local/armeabi/objs/lua/llex.o: jni/engine/ext/liblua/llex.c \
  jni/engine/ext/liblua/lparser.h jni/engine/ext/liblua/lstring.h \
  jni/engine/ext/liblua/lgc.h jni/engine/ext/liblua/ltable.h
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/ctype.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/ctype.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/sys/cdefs.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/cdefs.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/sys/cdefs_elf.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/cdefs_elf.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/android/api-level.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/android/api-level.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/locale.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/locale.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/string.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/string.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/malloc.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/malloc.h:
 
 jni/engine/ext/liblua/lua.h:
 
 jni/engine/ext/liblua/luaconf.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/limits.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/limits.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/sys/limits.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/limits.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/linux/limits.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/linux/limits.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/machine/internal_types.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/machine/internal_types.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/machine/limits.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/machine/limits.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/sys/syslimits.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/syslimits.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/asm/page.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/asm/page.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/math.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/math.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/sys/types.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/types.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/stdint.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/stdint.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/sys/_types.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/_types.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/machine/_types.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/machine/_types.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/sys/_wchar_limits.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/_wchar_limits.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/linux/posix_types.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/linux/posix_types.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/linux/stddef.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/linux/stddef.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/linux/compiler.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/linux/compiler.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/asm/posix_types.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/asm/posix_types.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/asm/types.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/asm/types.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/linux/types.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/linux/types.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/machine/kernel.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/machine/kernel.h:
 
-E:/program/SDK/android-ndk-r9d/platforms/android-17/arch-arm/usr/include/sys/sysmacros.h:
+D:/program/tools/android_sdk/android-ndk-r10e/platforms/android-9/arch-arm/usr/include/sys/sysmacros.h:
 
 jni/engine/ext/liblua/ldo.h:
 

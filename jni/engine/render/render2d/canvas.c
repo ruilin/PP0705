@@ -327,9 +327,10 @@ PUBLIC void canvas_renderTest(Graphic *g) {
 //        grey = 0.0f;
 //    }
 //    glClearColor(grey, grey, grey, 1.0f);
-//    checkGlError("glClearColor");
-//    glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-//    checkGlError("glClear");
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    checkGlError("glClearColor");
+    glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+    checkGlError("glClear");
 
 //    glUseProgram(gProgram);
 //    checkGlError("glUseProgram");
