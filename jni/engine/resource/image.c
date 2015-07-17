@@ -196,7 +196,7 @@ PUBLIC unsigned char *image_readPng(const char* filePath) {
 PRIVATE void _image_init(Texture *tex, IMG_TYPE type) {
 	tex->texId = -1;
 	tex->type = type;
-	tex->callback_deleteBind = tex->callback_param_graphic = NULL;
+	tex->callback_deleteBind = NULL;
 	tex->isBinded = FALSE;
 	tex->width = tex->height = tex->widthPOT = tex->heightPOT = 0;
 	tex->size = 0;
@@ -256,7 +256,7 @@ PUBLIC Texture *image_crateTextPngPOT(const char *text, int fontsize, int stroke
 PUBLIC void image_destroy(Texture *img) {
 	if (NULL != img) {
 		if (NULL != img->callback_deleteBind) {
-			img->callback_deleteBind(img->callback_param_graphic, img);
+			img->callback_deleteBind(img);
 		}
 		if (IMG_TYPE_TEXT != img->type)
 			FREE(img->pixels);
@@ -265,9 +265,8 @@ PUBLIC void image_destroy(Texture *img) {
 	return;
 }
 
-PUBLIC void image_setCallBackFun(Texture *tex, CALLBACK_FUN_DELETE_BIND callbackFun, void *graphic) {
+PUBLIC void image_setCallBackFun(Texture *tex, CALLBACK_FUN_DELETE_BIND callbackFun) {
 	tex->callback_deleteBind = callbackFun;
-	tex->callback_param_graphic = graphic;
 	return;
 }
 

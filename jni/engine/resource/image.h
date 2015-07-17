@@ -30,14 +30,13 @@ typedef enum {
 	IMG_TYPE_TEXT	= 1
 } IMG_TYPE;
 
-typedef void (*CALLBACK_FUN_DELETE_BIND)(void *graphic, void *tex);
+typedef void (*CALLBACK_FUN_DELETE_BIND)(void *tex);
 
 typedef struct Image {
 	GLuint texId;
 	char filePath[128];
 	IMG_TYPE type;
 	CALLBACK_FUN_DELETE_BIND callback_deleteBind;
-	void *callback_param_graphic;
 	unsigned int size;
 	unsigned char *pixels;
 	unsigned char bytesPerPixel;
@@ -62,7 +61,7 @@ Texture *image_createPngPOT(const char *filePath, IMG_QUALITY quality);
 Texture *image_crateTextPngPOT(const char *text, int fontsize, int strokeWidth, int paintStyle,
 												int r, int g, int b, int a, int strokeR, int strokeG, int strokeB, int strokeA, int *textPixelSize);
 void image_destroy(Texture *img);
-void image_setCallBackFun(Texture *tex, CALLBACK_FUN_DELETE_BIND callbackFun, void *graphic);
+void image_setCallBackFun(Texture *tex, CALLBACK_FUN_DELETE_BIND callbackFun);
 unsigned char *image_iconMergeTint(unsigned char *image, unsigned char *mask,
 									unsigned char *backgroundImage,
 									/*unsigned char *resultBitmap,*/

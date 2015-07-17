@@ -36,7 +36,6 @@ typedef enum {
 typedef struct Graphic {
 	GRAPHIC_ROTATE rotate;
 	GRAPHIC_TURN turnover;
-	void *hash_tex;
 	float red;
 	float green;
 	float blue;
@@ -57,8 +56,6 @@ typedef struct Graphic {
 
 Graphic *graphic_create();
 void graphic_destroy(Graphic *g);
-unsigned int graphic_genTexture(Graphic *g, Texture *tex);
-void graphic_recyleTexture(void *graphic, void *img);
 void graphic_setColor4f(Graphic *g, float red, float green, float blue, float alpha);
 void graphic_setTextStyle(Graphic *g, int fontSize, TEXT_STYLE paintStyle);
 void graphic_setTextColor(Graphic *g, int red, int green, int blue, int alpha);

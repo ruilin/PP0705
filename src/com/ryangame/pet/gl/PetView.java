@@ -97,8 +97,8 @@ public class PetView extends GLSurfaceView {
 			layoutParams.height = MainMenu.viewHeight;
 		}
 		this.setLayoutParams(layoutParams);
+		/*init(false, 0, 0);*/
         init(true, 16, 0);
-//		init(false, 0, 0);
     }
 
     private void init(boolean translucent, int depth, int stencil) {

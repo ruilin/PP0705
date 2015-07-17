@@ -18,6 +18,21 @@ PUBLIC BOOL mScissorEnabled;
 #define GL_ENABLE_SCISSOR()			(FALSE == mScissorEnabled ? ( glEnable(GL_SCISSOR_TEST), mScissorEnabled = TRUE ) : 0)
 #define GL_DISABLE_SCISSOR()		(TRUE == mScissorEnabled ? ( glDisable(GL_SCISSOR_TEST), mScissorEnabled = FALSE ) : 0)
 
+/* maps the quality (GFX_TEX_QUALITY_XXX) to specific texture parameters */
+struct _tex_quality_parameters {
+	GLfloat minFilter;
+	GLfloat magFilter;
+	GLfloat wrapModeS;
+	GLfloat wrapModeT;
+};
+
+PRIVATE const struct _tex_quality_parameters _TEX_QUALITY_PARAMETERS[] = {
+	/* GFX_TEX_QUALITY_NEAREST/GFX_TEX_QUALITY_LOW/GFX_TEX_QUALITY_FASTER */
+	{GL_NEAREST	, GL_NEAREST, GL_REPEAT			, GL_REPEAT},
+	/* GFX_TEX_QUALITY_LINEAR/GFX_TEX_QUALITY_HIGH */
+	{GL_LINEAR	, GL_LINEAR , GL_CLAMP_TO_EDGE	, GL_CLAMP_TO_EDGE}
+};
+
 PRIVATE unsigned int LastTexId;
 
 
@@ -267,6 +282,62 @@ PUBLIC BOOL canvas_bind_texture(GLuint texId) {
 	return FALSE;
 }
 
+/*
+ * rescyle the texture
+ */
+PRIVATE void canvas_recyleTexture(void *img) {
+	if (NULL == img) return;
+	unsigned int texId;
+	Texture *tex = (Texture *)img;
+	tex->isBinded = FALSE;
+	glDeleteTextures(1, &texId);
+	return;
+}
+
+PRIVATE GLuint canvas_bindTexture(Graphic *g, Texture *tex) {
+	if (NULL == g || NULL == tex) {
+		LOGE("canvas_genTexture() NULL == g || NULL == tex");
+		return -1;
+	}
+	if (0 == LastTexId || tex->texId != LastTexId) {
+		canvas_recyleTexture(tex);
+	} else {
+		return LastTexId;
+	}
+	if (TRUE == tex->isBinded) {
+		goto _exit;
+	}
+	tex->isBinded = TRUE;
+	LastTexId = tex->texId;
+
+	glGenTextures(1, &(tex->texId));
+	glBindTexture(GL_TEXTURE_2D, tex->texId);
+
+	switch (tex->bytesPerPixel) {
+	case 4:
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->widthPOT, tex->heightPOT, 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid *)(tex->pixels));
+		break;
+	case 2:
+		/* rgb_565 not tested */
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex->widthPOT, tex->heightPOT, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, (GLvoid *)(tex->pixels));
+		break;
+	case 1:
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, tex->widthPOT, tex->heightPOT, 0, GL_ALPHA, GL_UNSIGNED_BYTE, (GLvoid *)(tex->pixels));
+		break;
+	default:
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->widthPOT, tex->heightPOT, 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid *)(tex->pixels));
+		break;
+	}
+	/* 设置纹理参数 */
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _TEX_QUALITY_PARAMETERS[tex->quality].minFilter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _TEX_QUALITY_PARAMETERS[tex->quality].magFilter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _TEX_QUALITY_PARAMETERS[tex->quality].wrapModeS);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _TEX_QUALITY_PARAMETERS[tex->quality].wrapModeT);
+	image_setCallBackFun(tex, canvas_recyleTexture);
+_exit:
+	return tex->texId;
+}
+
 /*******************************************************************/
 #include "image.h"
 PRIVATE Texture *tex;
@@ -276,39 +347,12 @@ PUBLIC void canvas_init(int screenWidth, int screenHeight,
 	LastTexId = 0;
 	setupGraphics(screenWidth, screenHeight);
 	tex = (Texture *)res_newPngPOT("cat.png", IMG_QUALITY_LINEAR);
-//	GL_ENABLE_TEXTURE();
-//	GLuint textureId;
-//	glGenTextures(1, &textureId);
-//
-//	glBindTexture(GL_TEXTURE_CUBE_MAP, textureId);
-//
-//	switch (tex->bytesPerPixel) {
-//	case 4:
-//		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->widthPOT, tex->heightPOT, 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid *)(tex->pixels));
-//		break;
-//	case 2:
-//		/* rgb_565 not tested */
-//		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex->widthPOT, tex->heightPOT, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, (GLvoid *)(tex->pixels));
-//		break;
-//	case 1:
-//		glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, tex->widthPOT, tex->heightPOT, 0, GL_ALPHA, GL_UNSIGNED_BYTE, (GLvoid *)(tex->pixels));
-//		break;
-//	default:
-//		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->widthPOT, tex->heightPOT, 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid *)(tex->pixels));
-//		break;
-//	}
-//
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
 
     glUseProgram(gProgram);
     checkGlError("glUseProgram");
 
     GL_ENABLE_TEXTURE();
-    GLuint texId = graphic_genTexture(engine_get()->g, tex);
+    canvas_bindTexture(engine_get()->g, tex);
 
 //    res_releasePng(tex);
 	return;
@@ -321,12 +365,6 @@ PUBLIC void canvas_end() {
 const GLfloat gTriangleVertices[] = { 0.0f, 0.5f, -0.5f, -0.5f, 0.5f, -0.5f };
 
 PUBLIC void canvas_renderTest(Graphic *g) {
-//    static float grey;
-//    grey += 0.01f;
-//    if (grey > 1.0f) {
-//        grey = 0.0f;
-//    }
-//    glClearColor(grey, grey, grey, 1.0f);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     checkGlError("glClearColor");
     glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
