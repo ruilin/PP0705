@@ -33,7 +33,7 @@ PRIVATE const struct _tex_quality_parameters _TEX_QUALITY_PARAMETERS[] = {
 	{GL_LINEAR	, GL_LINEAR , GL_CLAMP_TO_EDGE	, GL_CLAMP_TO_EDGE}
 };
 
-PRIVATE unsigned int LastTexId;
+PRIVATE GLuint LastTexId;
 
 
 static void printGLString(const char *name, GLenum s) {
@@ -53,12 +53,13 @@ static const char gVertexShader[] =
 	"attribute vec4 a_color;\n"
 	"varying vec4 v_color;\n"
 
-    "attribute vec4 vPosition;\n"
+    "attribute vec4 a_position;\n"
 	"attribute vec2 a_coord;\n"
 	"varying vec2 v_coord;\n"
     "void main() {\n"
 	"  v_color = a_color;\n"
-    "  gl_Position = vPosition;\n"
+//    "  gl_Position = a_position;\n"
+	"  gl_Position = vec4(a_position.xy,0,1);\n"
 	"  v_coord = a_coord;"
     "}\n";
 
@@ -168,13 +169,17 @@ typedef struct {
 	float Color[4];
 	float TexCoord[2];
 } Vertex;
-
-Vertex texVerData[] =
+#define POSX	0.0
+#define POSY	0.0
+#define POSW	0.39375
+#define POSH	0.305
+#define LT		1.0
+PRIVATE Vertex texVerData[] =
 {
-	{{-1,-1},{1,1,1,1},{0,1}},
-	{{1,-1},{1,1,1,1},{1,1}},
-	{{-1,1},{1,1,1,1},{0,0}},
-	{{1,1},{1,1,1,1},{1,0}}
+	{{POSX,			POSY},			{1,1,1,1},{0,LT}},
+	{{POSX + POSW,	POSY},			{1,1,1,1},{LT,LT}},
+	{{POSX,			POSY + POSH},	{1,1,1,1},{0,0}},
+	{{POSX + POSW,	POSY + POSH},	{1,1,1,1},{LT,0}},
 };
 
 BOOL setupGraphics(int w, int h) {
@@ -184,16 +189,20 @@ BOOL setupGraphics(int w, int h) {
     printGLString("Extensions", GL_EXTENSIONS);
 
     LOGI("setupGraphics(%d, %d)", w, h);
+    unsigned char *gVertexShader = jni_lib_readFromAssets("shader/tex2d.vsh", NULL);
+    unsigned char *gFragmentShader = jni_lib_readFromAssets("shader/tex2d.fsh", NULL);
     gProgram = createProgram(gVertexShader, gFragmentShader);
+    FREE(gVertexShader);
+    FREE(gFragmentShader);
     if (!gProgram) {
         LOGE("Could not create program.");
         return FALSE;
     }
-    gvPositionHandle = glGetAttribLocation(gProgram, "vPosition");
+    gvPositionHandle = glGetAttribLocation(gProgram, "a_position");
     gvColorHandle = glGetAttribLocation(gProgram, "a_color");
     gvCoordHandle = glGetAttribLocation(gProgram, "a_coord");
     checkGlError("glGetAttribLocation");
-    LOGI("glGetAttribLocation(\"vPosition\") = %d\n",
+    LOGI("glGetAttribLocation(\"a_position\") = %d\n",
             gvPositionHandle);
 
     glViewport(0, 0, w, h);
@@ -207,20 +216,20 @@ BOOL setupGraphics(int w, int h) {
      * glBlendFunc(GL_ONE, GL_ZERO); 	// 即只取源颜色，这也是默认值
      */
 
-
     /*-- VBO --*/
-//    GLuint vbo[2];
-//    glGenBuffers(2, vbo);
-//    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-//    glBufferData(GL_ARRAY_BUFFER, sizeof(vertercies), vertercies, GL_STATIC_DRAW);
-//    glEnableVertexAttribArray(gvPositionHandle);
-//    glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
-//
-//    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-//    glBufferData(GL_ARRAY_BUFFER, sizeof(vcolor), vcolor, GL_STATIC_DRAW);
-//    glEnableVertexAttribArray(gvColorHandle);
-//    glVertexAttribPointer(gvColorHandle, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
+    /*
+    GLuint vbo[2];
+    glGenBuffers(2, vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertercies), vertercies, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(gvPositionHandle);
+    glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
 
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vcolor), vcolor, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(gvColorHandle);
+    glVertexAttribPointer(gvColorHandle, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
+	*/
     GLuint vbo[1];
     glGenBuffers(1, vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
@@ -235,29 +244,6 @@ BOOL setupGraphics(int w, int h) {
     glEnableVertexAttribArray(gvCoordHandle);
     glVertexAttribPointer(gvCoordHandle, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (GLvoid *)(sizeof(float) * 6));
     /*glVertexAttribPointer(gvColorHandle, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 7, (GLvoid *)(sizeof(float) * 3));*/
-
-//    GLuint vbo;
-//    glGenBuffers(1, &vbo);
-//    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-//    GLfloat vcolor[] = { 0, 1, 0, 1,    //第一个点的颜色，绿色
-//                         1, 0, 0, 1,  	//第二个点的颜色, 红色
-//                         0, 0, 1, 1 };  //第三个点的颜色， 蓝色
-//    glBufferData(GL_ARRAY_BUFFER, sizeof(vcolor), vcolor, GL_STATIC_DRAW);
-//    glEnableVertexAttribArray(gvColorHandle);
-//    glVertexAttribPointer(gvColorHandle, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
-
-
-//    GLuint vertexVBO;
-//    glGenBuffers(1, &vertexVBO);
-//	glBindBuffer(GL_ARRAY_BUFFER, vertexVBO);
-//	float vertercies[] =
-//	          {-1, -1,
-//	        	1, -1,
-//	           -1,  1,
-//	            1,  1};
-//	glBufferData(GL_ARRAY_BUFFER, sizeof(vertercies), vertercies, GL_STATIC_DRAW);
-//	glEnableVertexAttribArray(gvPositionHandle);
-//	glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
 
     /* 指定索引数据，才可以用 glDrawElements() 绘制；使用 glDrawArrays() 则不需要 */
     GLuint indexVBO;
@@ -300,18 +286,17 @@ PRIVATE GLuint canvas_bindTexture(Graphic *g, Texture *tex) {
 		return -1;
 	}
 	if (0 == LastTexId || tex->texId != LastTexId) {
-		canvas_recyleTexture(tex);
+		glDeleteTextures(1, &LastTexId);
 	} else {
-		return LastTexId;
+		goto _exit;
 	}
 	if (TRUE == tex->isBinded) {
 		goto _exit;
 	}
-	tex->isBinded = TRUE;
-	LastTexId = tex->texId;
-
 	glGenTextures(1, &(tex->texId));
 	glBindTexture(GL_TEXTURE_2D, tex->texId);
+	tex->isBinded = TRUE;
+	LastTexId = tex->texId;
 
 	switch (tex->bytesPerPixel) {
 	case 4:
@@ -351,10 +336,6 @@ PUBLIC void canvas_init(int screenWidth, int screenHeight,
     glUseProgram(gProgram);
     checkGlError("glUseProgram");
 
-    GL_ENABLE_TEXTURE();
-    canvas_bindTexture(engine_get()->g, tex);
-
-//    res_releasePng(tex);
 	return;
 }
 
@@ -362,26 +343,18 @@ PUBLIC void canvas_end() {
 	res_releasePng(tex);
 }
 
-const GLfloat gTriangleVertices[] = { 0.0f, 0.5f, -0.5f, -0.5f, 0.5f, -0.5f };
+PUBLIC void canvas_drawBitmap(Texture *tex, int x, int y) {
+    GL_ENABLE_TEXTURE();
+    canvas_bindTexture(engine_get()->g, tex);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, (GLvoid *)0);
+    return;
+}
 
 PUBLIC void canvas_renderTest(Graphic *g) {
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    checkGlError("glClearColor");
-    glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-    checkGlError("glClear");
-
-//    glUseProgram(gProgram);
-//    checkGlError("glUseProgram");
-
-//    glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, gTriangleVertices);
-//    checkGlError("glVertexAttribPointer");
-//    glEnableVertexAttribArray(gvPositionHandle);
-//    checkGlError("glEnableVertexAttribArray");
-//    glDrawArrays(GL_TRIANGLES, 0, 3);
-//    checkGlError("glDrawArrays");
-
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, (GLvoid *)0);
-//    glDrawArrays(GL_TRIANGLES, 0, 6);
+//	canvas_clear(0.0f, 0.0f, 0.0f, 0.0f);
+	canvas_clear(0.5f, 0.5f, 0.5f, 1.0f);
+    /*glDrawArrays(GL_TRIANGLES, 0, 6);*/
+	canvas_drawBitmap(tex, 1, 1);
 }
 
 

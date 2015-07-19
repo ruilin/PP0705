@@ -10,7 +10,7 @@
 
 PUBLIC void renderer2d_init(Engine *engine) {
 	text_init();
-	canvas_init(engine->screenWidth, engine->screenWidth, engine->screenWidth, engine->screenWidth);
+	canvas_init(engine->screenWidth, engine->screenHeight, engine->screenWidth, engine->screenHeight);
 //	renderer_init(engine);
 	return;
 }

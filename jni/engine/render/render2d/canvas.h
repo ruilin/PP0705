@@ -28,6 +28,12 @@ typedef enum {
 	ALIGN_CENTER	= 4,
 } CANVAS_ALIGN;
 
+static inline canvas_clear(float r, float g, float b, float a) {
+	glClearColor(r, g, b, a);
+    /*checkGlError("glClearColor");*/
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+    /*checkGlError("glClear");*/
+}
 
 void canvas_init(int screenWidth, int screenHeight,
 				unsigned short canvasWidth, unsigned short canvasHeight);

@@ -75,6 +75,8 @@ public class PetView extends GLSurfaceView {
     private WindowManager windowManager;
     private ContextFactory contextFactory;
     private Renderer renderer;
+	public static int viewWidth = 480;
+	public static int viewHeight = 800;
 
     public PetView(Context context, WindowManager windowManager) {
         super(context);
@@ -90,11 +92,11 @@ public class PetView extends GLSurfaceView {
 			layoutParams.format = PixelFormat.RGBA_8888;
 			layoutParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL
 					| LayoutParams.FLAG_NOT_FOCUSABLE;
-			layoutParams.x = (screenWidth - MainMenu.viewWidth) >> 1;
-			layoutParams.y = (screenHeight - MainMenu.viewHeight) >> 1;
+			layoutParams.x = (screenWidth - viewWidth) >> 1;
+			layoutParams.y = (screenHeight - viewHeight) >> 1;
 			layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
-			layoutParams.width = MainMenu.viewWidth;
-			layoutParams.height = MainMenu.viewHeight;
+			layoutParams.width = viewWidth;
+			layoutParams.height = viewHeight;
 		}
 		this.setLayoutParams(layoutParams);
 		/*init(false, 0, 0);*/
