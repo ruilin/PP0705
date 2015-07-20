@@ -72,6 +72,7 @@ LOCAL_SRC_FILES_ENGINE			:=	engine/base/jni_main.c							\
 										engine/render/render2d/renderer2d.c				\
 										engine/render/render2d/graphic.c				\
 										engine/render/render2d/canvas.c					\
+										engine/render/render2d/matrix.c					\
 										engine/render/render2d/text.c					\
 										engine/runnable/runnable.c						\
 										engine/runnable/thread/gthread.c				\

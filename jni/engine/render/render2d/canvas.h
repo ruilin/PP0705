@@ -17,6 +17,7 @@
 #include <resource/image.h>
 #include <data/rect.h>
 
+#include "matrix.h"
 #include "graphic.h"
 #include "text.h"
 
