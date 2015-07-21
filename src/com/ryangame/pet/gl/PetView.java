@@ -75,8 +75,8 @@ public class PetView extends GLSurfaceView {
     private WindowManager windowManager;
     private ContextFactory contextFactory;
     private Renderer renderer;
-	public static int viewWidth = 480;
-	public static int viewHeight = 800;
+	public static int viewWidth = 400;
+	public static int viewHeight = 400;
 
     public PetView(Context context, WindowManager windowManager) {
         super(context);
