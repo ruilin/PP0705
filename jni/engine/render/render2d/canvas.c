@@ -138,7 +138,6 @@ GLuint createProgram(const char* pVertexSource, const char* pFragmentSource) {
     return program;
 }
 
-GLuint gProgram;
 GLuint gvPositionHandle;
 GLuint gvColorHandle;
 GLuint gvCoordHandle;
@@ -169,34 +168,35 @@ typedef struct {
 	float Color[4];
 	float TexCoord[2];
 } Vertex;
-#define POSX	0.0
-#define POSY	0.0
-/* POT size */
-#define POSW	256
-#define POSH	256
-#define LT		1.0
-#define VER_COUNT		4
-PRIVATE Vertex texVerData[VER_COUNT] =
-{
-		/*
-	{{POSX,			POSY},			{1,1,1,1},{0,LT}},
-	{{POSX + POSW,	POSY},			{1,1,1,1},{LT,LT}},
-	{{POSX,			POSY + POSH},	{1,1,1,1},{0,0}},
-	{{POSX + POSW,	POSY + POSH},	{1,1,1,1},{LT,0}},
-	*/
-	{{POSX,			POSY},			{1,1,1,1},					{0,0}},
-	{{POSX + POSW,	POSY},			{1,1,1,1},			{LT,0}},
-	{{POSX,			POSY + POSH},	{1,1,1,1},			{0,LT}},
-	{{POSX + POSW,	POSY + POSH},	{1,1,1,1},	{LT,LT}},
-};
+//#define POSX	0.0
+//#define POSY	0.0
+///* POT size */
+//#define POSW	256
+//#define POSH	256
+//#define LT		1.0
+//#define VER_COUNT		4
+//PRIVATE Vertex texVerData[VER_COUNT] =
+//{
+//		/*
+//	{{POSX,			POSY},			{1,1,1,1},{0,LT}},
+//	{{POSX + POSW,	POSY},			{1,1,1,1},{LT,LT}},
+//	{{POSX,			POSY + POSH},	{1,1,1,1},{0,0}},
+//	{{POSX + POSW,	POSY + POSH},	{1,1,1,1},{LT,0}},
+//	*/
+//	{{POSX,			POSY},			{1,1,1,1},					{0,0}},
+//	{{POSX + POSW,	POSY},			{1,1,1,1},			{LT,0}},
+//	{{POSX,			POSY + POSH},	{1,1,1,1},			{0,LT}},
+//	{{POSX + POSW,	POSY + POSH},	{1,1,1,1},	{LT,LT}},
+//};
+PRIVATE Texture *tex;
 
-BOOL setupGraphics(int w, int h) {
+PRIVATE BOOL canvas_setShader() {
+	GLuint gProgram;
     printGLString("Version", GL_VERSION);
     printGLString("Vendor", GL_VENDOR);
     printGLString("Renderer", GL_RENDERER);
     printGLString("Extensions", GL_EXTENSIONS);
 
-    LOGI("setupGraphics(%d, %d)", w, h);
     unsigned char *gVertexShader = jni_lib_readFromAssets("shader/tex2d.vsh", NULL);
     unsigned char *gFragmentShader = jni_lib_readFromAssets("shader/tex2d.fsh", NULL);
     gProgram = createProgram(gVertexShader, gFragmentShader);
@@ -213,17 +213,12 @@ BOOL setupGraphics(int w, int h) {
     LOGI("glGetAttribLocation(\"a_position\") = %d\n",
             gvPositionHandle);
 
-    glViewport(0, 0, w, h);
-    checkGlError("glViewport");
+    glUseProgram(gProgram);
+    checkGlError("glUseProgram");
+    return TRUE;
+}
 
-    /* 开启 alpha blend：支持贴图背景透明 */
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    /*
-     * glBlendFunc(GL_ONE, GL_ONE);		// 即源与目标颜色的RGBA分别相加，效果类似PS的正片叠底
-     * glBlendFunc(GL_ONE, GL_ZERO); 	// 即只取源颜色，这也是默认值
-     */
-
+PRIVATE BOOL canvas_drawMatrix(Graphic *g, unsigned int x, unsigned int y, unsigned int POTW, unsigned int POTH) {
     /*-- VBO --*/
     /*
     GLuint vbo[2];
@@ -239,10 +234,22 @@ BOOL setupGraphics(int w, int h) {
     glVertexAttribPointer(gvColorHandle, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
 	*/
     /* 屏幕左边转 Opengl 世界坐标 */
+    float screenX = 0.0, screenY = 0.0;
+    float POSX, POSY;
+    float LT = 1.0;
+    POSX = x;
+    POSY = y;
+    Vertex texVerData[4] =
+    {
+    	{{POSX,					POSY},					{g->vColor[0][0],g->vColor[0][1],g->vColor[0][2],g->vColor[0][3]},	{0,0}},
+    	{{POSX + POTW,	POSY},					{g->vColor[1][0],g->vColor[1][1],g->vColor[1][2],g->vColor[1][3]},	{LT,0}},
+    	{{POSX,					POSY + POTH},	{g->vColor[2][0],g->vColor[2][1],g->vColor[2][2],g->vColor[2][3]},	{0,LT}},
+    	{{POSX + POTW,	POSY + POTH},	{g->vColor[3][0],g->vColor[3][1],g->vColor[3][2],g->vColor[3][3]},	{LT,LT}},
+    };
     int i;
-    for (i = 0; i < VER_COUNT; i++) {
-    	texVerData[i].Position[0] = texVerData[i].Position[0] * 2 / w - 1.0f;
-    	texVerData[i].Position[1] = texVerData[i].Position[1] * -2 / h + 1.0f;
+    for (i = 0; i < 4; i++) {
+    	texVerData[i].Position[0] = texVerData[i].Position[0] * 2 / engine_get()->screenWidth - 1.0f;
+    	texVerData[i].Position[1] = texVerData[i].Position[1] * -2 / engine_get()->screenHeight + 1.0f;
     }
     GLuint vbo[1];
     glGenBuffers(1, vbo);
@@ -260,15 +267,17 @@ BOOL setupGraphics(int w, int h) {
     /*glVertexAttribPointer(gvColorHandle, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 7, (GLvoid *)(sizeof(float) * 3));*/
 
     /* 指定索引数据，才可以用 glDrawElements() 绘制；使用 glDrawArrays() 则不需要 */
-    GLuint indexVBO;
-    glGenBuffers(1, &indexVBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexVBO);
+    GLuint indexVBO[1];
+    glGenBuffers(1, indexVBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexVBO[0]);
 	GLubyte indices[] = {
-							0,1,2,  //第一个三角形索引
+							0,1,2,  	//第一个三角形索引
 							2,3,1 	//第二个三角形索引
 						};
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, (GLvoid *)0);
+	glDeleteBuffers(1, vbo);
+	glDeleteBuffers(1, indexVBO);
     return TRUE;
 }
 
@@ -419,17 +428,22 @@ _exit:
 
 /*******************************************************************/
 #include "image.h"
-PRIVATE Texture *tex;
 
 PUBLIC void canvas_init(int screenWidth, int screenHeight,
 						unsigned short canvasWidth, unsigned short canvasHeight) {
 	LastTexId = 0;
-	setupGraphics(screenWidth, screenHeight);
+    glViewport(0, 0, screenWidth, screenHeight);
+    checkGlError("glViewport");
+    /* 开启 alpha blend：支持贴图背景透明 */
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    /*
+     * glBlendFunc(GL_ONE, GL_ONE);		// 即源与目标颜色的RGBA分别相加，效果类似PS的正片叠底
+     * glBlendFunc(GL_ONE, GL_ZERO); 		// 即只取源颜色，这也是默认值
+     */
+	canvas_setShader();
+
 	tex = (Texture *)res_newPngPOT("cat.png", IMG_QUALITY_LINEAR);
-
-    glUseProgram(gProgram);
-    checkGlError("glUseProgram");
-
 	return;
 }
 
@@ -437,10 +451,11 @@ PUBLIC void canvas_end() {
 	res_releasePng(tex);
 }
 
-PUBLIC void canvas_drawBitmap(Texture *tex, int x, int y) {
+PUBLIC void canvas_drawBitmap(Texture *tex, Graphic *g, int x, int y) {
     GL_ENABLE_TEXTURE();
-    canvas_bindTexture(engine_get()->g, tex);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, (GLvoid *)0);
+    canvas_bindTexture(g, tex);
+    graphic_setSingleColor(g, 1.0,1.0,1.0,1.0);
+    canvas_drawMatrix(g, x, y, tex->widthPOT, tex->heightPOT);
     return;
 }
 
@@ -448,7 +463,7 @@ PUBLIC void canvas_renderTest(Graphic *g) {
 //	canvas_clear(0.0f, 0.0f, 0.0f, 0.0f);
 	canvas_clear(0.5f, 0.5f, 0.5f, 1.0f);
     /*glDrawArrays(GL_TRIANGLES, 0, 6);*/
-	canvas_drawBitmap(tex, 1, 1);
+	canvas_drawBitmap(tex, g, 1, 1);
 }
 
 

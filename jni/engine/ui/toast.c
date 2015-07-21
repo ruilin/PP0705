@@ -129,7 +129,7 @@ PUBLIC void toast_render(Graphic *g) {
 	void *iterator = linked_list_iterator(toast.link_msg, LINKED_LIST_TAIL);
 	while (NULL != iterator) {
 		Toast_Msg *msg = linked_list_iterator_prev(&iterator);
-		graphic_setColor4f(g, 1.0f, 1.0f, 1.0f, msg->alpha);
+		graphic_setSingleColor(g, 1.0f, 1.0f, 1.0f, msg->alpha);
 //		canvas_draw_string(msg->str, g, toast.canvasWidth_half, msg->drawY, ALIGN_CENTER);
 		LOGE("%s", msg->str);
 	}

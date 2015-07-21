@@ -167,7 +167,7 @@ public class Helper {
 	@SuppressLint("NewApi")
 	public static void getSysInfo(String output[], long outputLong[]) {
 		Activity app = mActivity;
-		output[0] = Environment.getExternalStorageDirectory().getAbsolutePath();
+		output[0] = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/" +  app.getPackageName();
 		output[1] = Environment.getRootDirectory().getAbsolutePath();
 		output[2] = Environment.getDataDirectory().getAbsolutePath();
 		output[3] = Environment.getDownloadCacheDirectory().getAbsolutePath();

@@ -12,9 +12,28 @@
 
 PRIVATE unsigned char _engine_path[128];
 
+PRIVATE void file_createDir(const char* pPath) {
+	 char tmpPath[256];
+	 const char* pCur = pPath;
+	 int pos = 0;
+	 if(-1 != access(pPath, 0))
+		 return;
+	 memset(tmpPath, 0, sizeof(tmpPath));
+	 while(*pCur++ != '\0') {
+		tmpPath[pos++] = *(pCur - 1);
+		 if (*pCur == '/' || *pCur == '\0') {
+			 if (0 != access(tmpPath, 0) && strlen(tmpPath) > 0) {
+				 mkdir(tmpPath, S_DEF_MOD);
+			 }
+		 }
+	 }
+	 return;
+}
+
 PUBLIC void file_op_init(const char *sdcardPath) {
 	sprintf(_engine_path, "%s/%s", sdcardPath, ENGINE_DIR);
 	struct stat sb;
+	file_createDir(_engine_path);
 	if (0 != stat(_engine_path, &sb)) {
 		/* 引擎目录不存在则创建它 */
 		if (0 != mkdir(_engine_path, S_DEF_MOD)) {
