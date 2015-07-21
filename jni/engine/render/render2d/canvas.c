@@ -171,16 +171,23 @@ typedef struct {
 } Vertex;
 #define POSX	0.0
 #define POSY	0.0
-#define POSW	189
-#define POSH	244
+/* POT size */
+#define POSW	256
+#define POSH	256
 #define LT		1.0
 #define VER_COUNT		4
 PRIVATE Vertex texVerData[VER_COUNT] =
 {
+		/*
 	{{POSX,			POSY},			{1,1,1,1},{0,LT}},
 	{{POSX + POSW,	POSY},			{1,1,1,1},{LT,LT}},
 	{{POSX,			POSY + POSH},	{1,1,1,1},{0,0}},
 	{{POSX + POSW,	POSY + POSH},	{1,1,1,1},{LT,0}},
+	*/
+	{{POSX,			POSY},			{1,1,1,1},					{0,0}},
+	{{POSX + POSW,	POSY},			{1,1,1,1},			{LT,0}},
+	{{POSX,			POSY + POSH},	{1,1,1,1},			{0,LT}},
+	{{POSX + POSW,	POSY + POSH},	{1,1,1,1},	{LT,LT}},
 };
 
 BOOL setupGraphics(int w, int h) {
@@ -235,7 +242,7 @@ BOOL setupGraphics(int w, int h) {
     int i;
     for (i = 0; i < VER_COUNT; i++) {
     	texVerData[i].Position[0] = texVerData[i].Position[0] * 2 / w - 1.0f;
-    	texVerData[i].Position[1] = texVerData[i].Position[1] * 2 / h - 1.0f;
+    	texVerData[i].Position[1] = texVerData[i].Position[1] * -2 / h + 1.0f;
     }
     GLuint vbo[1];
     glGenBuffers(1, vbo);
