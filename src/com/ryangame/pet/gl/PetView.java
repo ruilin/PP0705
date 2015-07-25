@@ -389,6 +389,7 @@ public class PetView extends GLSurfaceView {
     	
     	public void destroyWorld() {
     		GL2JNILib.destroy(globalData);
+    		globalData = null;
     	}
     	
     	public void addEvent(InputEvent pointers) {
@@ -396,6 +397,7 @@ public class PetView extends GLSurfaceView {
     	}
     	
         public void onDrawFrame(GL10 gl) {
+        	if (null == globalData) return;
     		if (0 < events.size()) {
     			globalData.inputs = new InputEvent[events.size()];
     			globalData.inputs = events.toArray(INPUT_EVENT_TYPE);

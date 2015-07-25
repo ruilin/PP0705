@@ -29,7 +29,7 @@ typedef enum {
 	ALIGN_CENTER	= 4,
 } CANVAS_ALIGN;
 
-static inline canvas_clear(float r, float g, float b, float a) {
+static inline void canvas_clear(float r, float g, float b, float a) {
 	glClearColor(r, g, b, a);
     /*checkGlError("glClearColor");*/
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
