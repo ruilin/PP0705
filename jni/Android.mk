@@ -44,6 +44,8 @@ LOCAL_C_INCLUDES 		 		:= $(LOCAL_PATH)/engine 							\
 									$(LOCAL_PATH)/engine/ui/view_include					\
 									$(LOCAL_PATH)/engine/render								\
 									$(LOCAL_PATH)/engine/render/render2d					\
+									$(LOCAL_PATH)/engine/world									\
+									$(LOCAL_PATH)/engine/gameworld							\
 									
 ################################################## ENGINE #####################################################											
 LOCAL_SRC_FILES_ENGINE			:=	engine/base/jni_main.c							\
@@ -86,7 +88,9 @@ LOCAL_SRC_FILES_ENGINE			:=	engine/base/jni_main.c							\
 LOCAL_CFLAGS    					:= -Werror
 LOCAL_SRC_FILES 					:= 	$(LOCAL_SRC_FILES_ENGINE)				\
 														gl_code.cpp											\
-														game/Sprite.cpp
+														game/Sprite.cpp									\
+														game/World.cpp									\
+
 LOCAL_LDLIBS    					:= -llog -landroid -lEGL -lGLESv2 -ljnigraphics -lz
 LOCAL_WHOLE_STATIC_LIBRARIES 	:= png lua
 include $(BUILD_SHARED_LIBRARY)

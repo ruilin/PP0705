@@ -13,6 +13,7 @@
 #include <engine.h>
 #include "thread/gthread.h"
 #include <io/file_op.h>
+#include "../world/gameworld.h"
 
 BOOL runnable_init(Engine *platform);
 BOOL runnable_end(Engine *platform);

@@ -26,7 +26,7 @@ PUBLIC BOOL runnable_init(Engine *engine) {
 	res_init();
 	ui_init(engine->screenWidth, engine->screenHeight, engine->gameWidth, engine->gameHeight);
 	ui_setSystemMsg(engine->debug);
-//	logic_init(engine);
+	logic_init(engine);
 	return TRUE;
 }
 

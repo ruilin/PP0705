@@ -8,8 +8,7 @@
 #include <game/Sprite.h>
 
 Sprite::Sprite() {
-	// TODO Auto-generated constructor stub
-
+	LOGE("xxxxxxxxxxxxxxxxxxx sprite");
 }
 
 Sprite::~Sprite() {
