@@ -15,24 +15,22 @@
 //void *operator new (size_t size);
 
 void * operator new(unsigned int size, const char *file, int line) {
-    LOGE("new size: %u", size);
-    LOGE("file: %s", file);
-    void * p = malloc(size);
+    void * p = MALLOC(size);
     return p;
 }
 #define new new(__FILE__, __LINE__)
 
 void operator delete(void * p) {
-    free(p);
+    FREE(p);
 }
 
 void operator delete[] (void * p) {
-    free(p);
+    FREE(p);
 }
 
 void logic_init() {
 	Sprite *w = new Sprite();
-	delete w;
+//	delete w;
 //	LOGE("Xxxxxxxxxxxxx  %s  %u", __FILE__, __LINE__);
 	return;
 }
