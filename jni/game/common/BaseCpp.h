@@ -11,9 +11,9 @@
 
 extern "C" {
 	#include <base.h>
-	void logic_init();
+	#include <engine.h>
+	#include <game.h>
 };
-#include <game.h>
 
 void * operator new(unsigned int size, const char *file, int line) {
     void * p = MALLOC(size);

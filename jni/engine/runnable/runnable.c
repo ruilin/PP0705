@@ -31,7 +31,7 @@ PUBLIC BOOL runnable_init(Engine *engine) {
 }
 
 PUBLIC BOOL runnable_end(Engine *engine) {
-//	logic_end(engine);
+	logic_end(engine);
 	ui_end();
 	res_end();
 	graphic_destroy(engine->g); engine->g = NULL;
@@ -49,6 +49,5 @@ PUBLIC BOOL runnable_run(Engine *engine) {
 	if (NULL != event) {
 		linked_list_removeItem(engine->linked_event, &event->linkedItem, TRUE);
 	}
-//	return logic_run(engine);
-	return TRUE;
+	return logic_run(engine);
 }

@@ -38,6 +38,7 @@ static inline void canvas_clear(float r, float g, float b, float a) {
 
 void canvas_init(int screenWidth, int screenHeight,
 				unsigned short canvasWidth, unsigned short canvasHeight);
+void canvas_drawBitmap(Texture *tex, Graphic *g, int x, int y);
 void canvas_renderTest(Graphic *g);
 
 #endif /* CANVAS_H_ */

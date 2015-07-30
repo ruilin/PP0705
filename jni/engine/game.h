@@ -12,12 +12,11 @@
 #include <engine.h>
 
 BOOL logic_init(Engine *engine);
-//BOOL logic_run(Engine *engine);
-//BOOL logic_end(Engine *engine);
-//
-//void renderer_init(Engine *engine);
-//void renderer_end(Engine *engine);
-//void renderer_draw(Engine *engine, Graphic *g);
+BOOL logic_run(Engine *engine);
+BOOL logic_end(Engine *engine);
+void renderer_init(Engine *engine);
+void renderer_end(Engine *engine);
+void renderer_draw(Engine *engine, Graphic *g);
 
 
 

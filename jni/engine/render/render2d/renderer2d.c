@@ -11,21 +11,22 @@
 PUBLIC void renderer2d_init(Engine *engine) {
 	text_init();
 	canvas_init(engine->screenWidth, engine->screenHeight, engine->screenWidth, engine->screenHeight);
-//	renderer_init(engine);
+	renderer_init(engine);
 	return;
 }
 
 PUBLIC void renderer2d_end(Engine *engine) {
 	canvas_end();
-//	renderer_end(engine);
+	renderer_end(engine);
 	text_end();
 	return;
 }
 
 PUBLIC void renderer2d_draw(Engine *engine) {
 	text_update();
+	canvas_renderTest(engine->g);
 //	if (FALSE == engine->isLoading) {
-//		renderer_draw(engine, engine->g);
+		renderer_draw(engine, engine->g);
 //		ui_render(engine->g);
 //		if (TRUE == engine->transEff_ifDrawing) {
 //			if (FALSE == engine->transEff_ifInited) {
@@ -37,6 +38,5 @@ PUBLIC void renderer2d_draw(Engine *engine) {
 //	} else {
 //		renderer_drawLoading(engine, engine->g);
 //	}
-	canvas_renderTest(engine->g);
 	return;
 }
