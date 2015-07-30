@@ -454,7 +454,7 @@ PUBLIC void canvas_end() {
 PUBLIC void canvas_drawBitmap(Texture *tex, Graphic *g, int x, int y) {
     GL_ENABLE_TEXTURE();
     canvas_bindTexture(g, tex);
-    graphic_setSingleColor(g, 1.0,1.0,1.0,1.0);
+    graphic_setSingleColor(g, 1.0f, 1.0f, 1.0f, 1.0f);
     canvas_drawMatrix(g, x, y, tex->widthPOT, tex->heightPOT);
     return;
 }

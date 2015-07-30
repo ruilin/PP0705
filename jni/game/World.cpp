@@ -30,6 +30,7 @@ void renderer_end(Engine *engine) {
 	return;
 }
 void renderer_draw(Engine *engine, Graphic *g) {
+//	canvas_clear(0.5f, 0.5f, 0.5f, 1.0f);
 	s->drawFrame(g, 0, 0, 1.0f, 1.0f, 1.0f, 1.0f);
 	return;
 }
