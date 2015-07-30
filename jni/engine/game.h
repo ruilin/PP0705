@@ -1,12 +1,12 @@
 /*
- * gameworld.h
+ * game.h
  *
- *  Created on: 2015年7月26日
+ *  Created on: 2015年7月30日
  *      Author: Ryan
  */
 
-#ifndef GAMEWORLD_H_
-#define GAMEWORLD_H_
+#ifndef GAME_H_
+#define GAME_H_
 
 #include <base.h>
 #include <engine.h>
@@ -19,4 +19,6 @@ BOOL logic_init(Engine *engine);
 //void renderer_end(Engine *engine);
 //void renderer_draw(Engine *engine, Graphic *g);
 
-#endif /* GAMEWORLD_H_ */
+
+
+#endif /* GAME_H_ */
