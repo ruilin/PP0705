@@ -28,12 +28,12 @@ PUBLIC Engine *engine_init(JNIEnv * env) {
 	engine.sysinfo = sysinfo_init();
 	file_op_init(engine.sysinfo->externalStorageDirectoryName);
 	database_init();
-
+	sysinfo_destroy(); engine.sysinfo = NULL;
 	return &engine;
 }
 
-PUBLIC void engine_end(Engine *engine) {
-	sysinfo_destroy(); engine->sysinfo = NULL;
+PUBLIC void engine_end() {
+//	sysinfo_destroy(); engine->sysinfo = NULL;
 	jni_lib_end();
 	return;
 }

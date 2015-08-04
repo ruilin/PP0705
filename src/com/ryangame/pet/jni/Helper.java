@@ -204,7 +204,7 @@ public class Helper {
 		output[34] = Build.VERSION.CODENAME;
 		output[35] = Build.VERSION.RELEASE;
 		output[36] = Build.VERSION.INCREMENTAL;
-		output[37] = Build.VERSION.SDK;
+		output[37] = String.valueOf(Build.VERSION.SDK_INT);
 		output[38] = getAppName(app);
 
 		outputLong[0] = app.getTaskId();

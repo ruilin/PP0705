@@ -145,7 +145,7 @@ PUBLIC void sysinfo_destroy() {
 	FREE((void *)s.downloadCacheDirectory);
 	FREE((void *)s.rootDirectory);
 	FREE((void *)s.externalStorageDirectoryName);
+//	LOGE("xxxx  NULL   %p  %p  %p  %p", s.dataDirectory, s.rootDirectory, s.downloadCacheDirectory, s.externalStorageDirectoryName);
 	FREE((void *)s.appName);
-
 	return;
 }

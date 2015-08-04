@@ -112,6 +112,7 @@ bool Sprite::drawFrame(Graphic *g, short x, short y,
     	}
     	return true;
     }
+    canvas_drawBitmap(resImg, g, 10, 10);
     return false;
 }
 

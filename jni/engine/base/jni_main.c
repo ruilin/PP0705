@@ -136,7 +136,7 @@ JNIEXPORT void JNICALL Java_com_ryangame_pet_gl_GL2JNILib_destroy(JNIEnv *env, j
 	renderer2d_end(engine);
 	runnable_end(engine);
 	linked_list_destroy(engine->linked_event);
-	engine_end(engine);
+	engine_end();
 	mem_dump();
 	return;
 }

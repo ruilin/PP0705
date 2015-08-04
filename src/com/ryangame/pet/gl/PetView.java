@@ -139,6 +139,7 @@ public class PetView extends GLSurfaceView {
     public void end() {
 //    	GL2JNILib.destroyWorld();
     	renderer.destroyWorld();
+    	renderer = null;
     }
     
 	@SuppressLint("ClickableViewAccessibility")

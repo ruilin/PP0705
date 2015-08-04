@@ -48,7 +48,7 @@ public class GameWindowManager {
 	 */
 	private static ActivityManager mActivityManager;
 
-	private static PetView petView = null;
+	public static PetView petView = null;
 	
 	public static void createPetView(Context context) {
 		WindowManager windowManager = getWindowManager(context);
@@ -60,6 +60,7 @@ public class GameWindowManager {
 		petView.end();
 		WindowManager windowManager = getWindowManager(context);
 		windowManager.removeView(petView);
+		petView = null;
 	}
 	/**
 	 * 创建一个小悬浮窗。初始位置为屏幕的右部中间位置。
