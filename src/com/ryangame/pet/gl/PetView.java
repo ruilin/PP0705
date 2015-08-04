@@ -33,11 +33,13 @@ package com.ryangame.pet.gl;
 
 
 import java.util.ArrayList;
+
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.opengles.GL10;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PixelFormat;
@@ -48,6 +50,9 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+
+import com.ryangame.pet.FloatWindowService;
+import com.ryangame.pet.MainActivity;
 import com.ryangame.pet.view.MainMenu;
 
 /**
@@ -80,7 +85,6 @@ public class PetView extends GLSurfaceView {
 
     public PetView(Context context, WindowManager windowManager) {
         super(context);
-        GL2JNILib.createWorld();
         this.windowManager = windowManager;
 		DisplayMetrics dm = new DisplayMetrics();
 		windowManager.getDefaultDisplay().getMetrics(dm);
@@ -132,14 +136,11 @@ public class PetView extends GLSurfaceView {
 
         /* Set the renderer responsible for frame rendering */
         renderer = new Renderer();
-        renderer.createWorld();
         setRenderer(renderer);
     }
     
     public void end() {
 //    	GL2JNILib.destroyWorld();
-    	renderer.destroyWorld();
-    	renderer = null;
     }
     
 	@SuppressLint("ClickableViewAccessibility")
@@ -373,24 +374,12 @@ public class PetView extends GLSurfaceView {
         protected int mStencilSize;
         private int[] mValue = new int[1];
     }
-
+    
     private static class Renderer implements GLSurfaceView.Renderer {
     	private final static InputEvent[] INPUT_EVENT_TYPE = new InputEvent[0];
     	private ArrayList<InputEvent> events = new ArrayList<InputEvent>();
     	
-    	public Platform globalData;
-    	
     	public Renderer() {
-    		globalData = new Platform();
-    	}
-    	
-    	public void createWorld() {
-    		GL2JNILib.createWorld();
-    	}
-    	
-    	public void destroyWorld() {
-    		GL2JNILib.destroy(globalData);
-    		globalData = null;
     	}
     	
     	public void addEvent(InputEvent pointers) {
@@ -398,26 +387,27 @@ public class PetView extends GLSurfaceView {
     	}
     	
         public void onDrawFrame(GL10 gl) {
-        	if (null == globalData) return;
+        	if (null == FloatWindowService.globalData) return;
     		if (0 < events.size()) {
-    			globalData.inputs = new InputEvent[events.size()];
-    			globalData.inputs = events.toArray(INPUT_EVENT_TYPE);
+    			FloatWindowService.globalData.inputs = new InputEvent[events.size()];
+    			FloatWindowService.globalData.inputs = events.toArray(INPUT_EVENT_TYPE);
     			events.clear();
     		} else {
-    			globalData.inputs = null;
+    			FloatWindowService.globalData.inputs = null;
     		}
-            GL2JNILib.step(globalData);
+            GL2JNILib.step(FloatWindowService.globalData);
         }
         
         /* 横竖屏切换时 */
         public void onSurfaceChanged(GL10 gl, int width, int height) {
+        	if (null == FloatWindowService.globalData) return;
 //            GL2JNILib.init(width, height);
-            GL2JNILib.init(globalData, width, height);
+        	GL2JNILib.init(FloatWindowService.globalData, width, height);
         }
 
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
             // Do nothing.
-        	GL2JNILib.create();
+//        	GL2JNILib.create(globalData);
         }
     }
 }

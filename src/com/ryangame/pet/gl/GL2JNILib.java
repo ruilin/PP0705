@@ -28,14 +28,8 @@ public class GL2JNILib {
      * @param width the current view width
      * @param height the current view height
      */
-//     public static native void init(int width, int height);
-//     public static native void step();
-//     public static native void createWorld();
-//     public static native void destroyWorld();
-     
-     public static native Platform init(Platform globalData, int width, int height);
-     public static native void createWorld();
-     public static native void create();
+     public static native boolean init(Platform globalData, int width, int height);
+     public static native void create(Platform globalData);
      public static native Platform step(Platform globalData);
      public static native void destroy(Platform globalData);
      public static native Platform getGlobalData(Platform globalData);

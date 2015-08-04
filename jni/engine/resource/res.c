@@ -64,13 +64,14 @@ PUBLIC void res_init() {
 	res.hash_img = hash_init(10);	/* hashmap size 2^10 = 1024 */
 
 	/* 拷贝脚本文件到SDcard */
-	engine_setLoading(TRUE, 1.0f);
-	Gthread gt;
-	gthread_new(&gt, _res_cpyScript, "script");
+//	engine_setLoading(TRUE, 1.0f);
+//	Gthread gt;
+//	gthread_new(&gt, _res_cpyScript, "script");
 	return;
 }
 
 PUBLIC void res_end() {
 	hash_destroy(res.hash_img);
+	res.hash_img = NULL;
 	return;
 }

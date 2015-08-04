@@ -57,6 +57,7 @@ PRIVATE BOOL _hash_tex_enum_clean(const void *key, unsigned int key_len,
 PUBLIC void text_end() {
 	hash_enum(textMng.hash_tex, _hash_tex_enum_clean, NULL);
 	hash_destroy(textMng.hash_tex);
+	textMng.hash_tex = NULL;
 	return;
 }
 

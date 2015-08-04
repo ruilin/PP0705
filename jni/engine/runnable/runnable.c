@@ -24,6 +24,7 @@ PUBLIC BOOL runnable_init(Engine *engine) {
 	engine->g = graphic_create();
 	gthread_init();
 	res_init();
+	text_init();
 	ui_init(engine->screenWidth, engine->screenHeight, engine->gameWidth, engine->gameHeight);
 	ui_setSystemMsg(engine->debug);
 	logic_init(engine);
@@ -33,6 +34,7 @@ PUBLIC BOOL runnable_init(Engine *engine) {
 PUBLIC BOOL runnable_end(Engine *engine) {
 	logic_end(engine);
 	ui_end();
+	text_end();
 	res_end();
 	graphic_destroy(engine->g); engine->g = NULL;
 	gthread_end();
@@ -46,6 +48,7 @@ PUBLIC BOOL runnable_run(Engine *engine) {
 	}
 	MotionEvent *event = linked_list_isEmpty(engine->linked_event) ? NULL : linked_list_getTail(engine->linked_event);
 	ui_run(event);
+	text_update();
 	if (NULL != event) {
 		linked_list_removeItem(engine->linked_event, &event->linkedItem, TRUE);
 	}

@@ -364,12 +364,12 @@ PUBLIC void canvas_init(int screenWidth, int screenHeight,
      */
 	canvas_setShader();
 
-	tex = (Texture *)res_newPngPOT("cat.png", IMG_QUALITY_LINEAR);
+//	tex = (Texture *)res_newPngPOT("cat.png", IMG_QUALITY_LINEAR);
 	return;
 }
 
 PUBLIC void canvas_end() {
-	res_releasePng(tex);
+//	res_releasePng(tex);
 }
 
 PUBLIC void canvas_drawBitmap(Texture *tex, Graphic *g, int x, int y) {
@@ -384,7 +384,7 @@ PUBLIC void canvas_renderTest(Graphic *g) {
 	canvas_clear(0.0f, 0.0f, 0.0f, 0.0f);
 //	canvas_clear(0.5f, 0.5f, 0.5f, 1.0f);
     /*glDrawArrays(GL_TRIANGLES, 0, 6);*/
-	canvas_drawBitmap(tex, g, 1, 1);
+//	canvas_drawBitmap(tex, g, 1, 1);
 }
 
 

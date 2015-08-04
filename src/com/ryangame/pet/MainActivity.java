@@ -8,19 +8,25 @@ import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import com.ryangame.pet.gl.GL2JNILib;
+import com.ryangame.pet.gl.PetView;
+import com.ryangame.pet.gl.Platform;
 import com.ryangame.pet.jni.Helper;
 
 public class MainActivity extends Activity {
-	Activity mActivity;
+	public static Activity mActivity;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mActivity = this;
 		Helper.init(this);
+		
 		setContentView(R.layout.activity_main);
 
 		Button btn_showPet = (Button) findViewById(R.id.show_pet);
@@ -45,7 +51,6 @@ public class MainActivity extends Activity {
 				}
 			}
 		});
-
 		// GameWindowManager.createPetView(getApplicationContext());
 	}
 
@@ -90,7 +95,6 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		super.onDestroy();
 	}
 }

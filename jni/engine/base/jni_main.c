@@ -21,8 +21,9 @@ PRIVATE Engine *engine;
 PRIVATE jobject _updateToJava(JNIEnv * env, jobject platformObj) {
     jclass objectClass = (*env)->FindClass(env, JAVA_PACKAGE_PATH_PATFORM);
     jfieldID state = (*env)->GetFieldID(env, objectClass,"state","I");
-
+//    jfieldID isInited = (*env)->GetFieldID(env, objectClass,"isInited","Z");
     (*env)->SetIntField(env, platformObj, state, engine->state);
+//    (*env)->SetBooleanField(env, platformObj, state, 1);
 	return platformObj;
 }
 
@@ -81,26 +82,27 @@ PRIVATE void _updateToNativeC(JNIEnv *env, jobject platformObj) {
     }
 }
 
-JNIEXPORT void JNICALL Java_com_ryangame_pet_gl_GL2JNILib_createWorld(JNIEnv * env, jobject obj) {
-	return;
-}
-
-JNIEXPORT void JNICALL Java_com_ryangame_pet_gl_GL2JNILib_create(JNIEnv * env, jobject obj) {
+JNIEXPORT void JNICALL Java_com_ryangame_pet_gl_GL2JNILib_create(JNIEnv * env, jobject obj, jobject platformObj) {
 	is2DMode = TRUE;
 	engine = engine_init(env);
 	engine->state = 99;
 	engine->gametime = time_util_now_ms();
 	LOGI("endian: %s", (ENDIAN_BIG == endian_get() ? "big" : "little"));
-	return;
-}
 
-JNIEXPORT jobject JNICALL Java_com_ryangame_pet_gl_GL2JNILib_init(JNIEnv * env, jobject obj, jobject platformObj,
-																		jint width, jint height) {
-	engine->screenWidth = width;
-	engine->screenHeight = height;
+	engine->screenWidth = 480;
+	engine->screenHeight = 800;
 	engine->linked_event = linked_list_create(motion_event_destroy);
 	/* logic */
 	runnable_init(engine);
+
+	return;
+}
+
+JNIEXPORT BOOL JNICALL Java_com_ryangame_pet_gl_GL2JNILib_init(JNIEnv * env, jobject obj, jobject platformObj,
+																		jint width, jint height) {
+	if (NULL == engine) return FALSE;
+	engine->screenWidth = width;
+	engine->screenHeight = height;
     /* render */
     if (TRUE == is2DMode)
     	renderer2d_init(engine);
@@ -108,10 +110,11 @@ JNIEXPORT jobject JNICALL Java_com_ryangame_pet_gl_GL2JNILib_init(JNIEnv * env, 
 //    	renderer3d_init(width, height);
     _updateToJava(env, platformObj);
 
-    return platformObj;
+    return TRUE;
 }
 
 JNIEXPORT jobject JNICALL Java_com_ryangame_pet_gl_GL2JNILib_step(JNIEnv * env, jobject obj, jobject platformObj) {
+	if (NULL == engine) return platformObj;
 	engine->gametime = time_util_now_ms();
 	_updateToNativeC(env, platformObj);
 	runnable_run(engine);
@@ -136,7 +139,7 @@ JNIEXPORT void JNICALL Java_com_ryangame_pet_gl_GL2JNILib_destroy(JNIEnv *env, j
 	renderer2d_end(engine);
 	runnable_end(engine);
 	linked_list_destroy(engine->linked_event);
-	engine_end();
+	engine_end(); engine = NULL;
 	mem_dump();
 	return;
 }

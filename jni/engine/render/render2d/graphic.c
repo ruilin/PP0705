@@ -34,6 +34,7 @@ PUBLIC void graphic_destroy(Graphic *g) {
 		goto _exit;
 	}
 	FREE(g);
+	g = NULL;
 _exit:
 	return;
 }

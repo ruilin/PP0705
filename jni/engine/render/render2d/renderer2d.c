@@ -9,7 +9,6 @@
 
 
 PUBLIC void renderer2d_init(Engine *engine) {
-	text_init();
 	canvas_init(engine->screenWidth, engine->screenHeight, engine->screenWidth, engine->screenHeight);
 	renderer_init(engine);
 	return;
@@ -18,12 +17,10 @@ PUBLIC void renderer2d_init(Engine *engine) {
 PUBLIC void renderer2d_end(Engine *engine) {
 	canvas_end();
 	renderer_end(engine);
-	text_end();
 	return;
 }
 
 PUBLIC void renderer2d_draw(Engine *engine) {
-	text_update();
 	canvas_renderTest(engine->g);
 //	if (FALSE == engine->isLoading) {
 		renderer_draw(engine, engine->g);

@@ -19,9 +19,8 @@
 #include <ui/ui.h>
 #include <ui/motion_event.h>
 
-JNIEXPORT void JNICALL Java_com_ryangame_pet_gl_GL2JNILib_createWorld(JNIEnv * env, jobject obj);
-JNIEXPORT void JNICALL Java_com_ryangame_pet_gl_GL2JNILib_create(JNIEnv * env, jobject obj);
-JNIEXPORT jobject JNICALL Java_com_ryangame_pet_gl_GL2JNILib_init(JNIEnv * env, jobject obj, jobject platformObj, jint width, jint height);
+JNIEXPORT void JNICALL Java_com_ryangame_pet_gl_GL2JNILib_create(JNIEnv * env, jobject obj, jobject platformObj);
+JNIEXPORT BOOL JNICALL Java_com_ryangame_pet_gl_GL2JNILib_init(JNIEnv * env, jobject obj, jobject platformObj, jint width, jint height);
 JNIEXPORT jobject JNICALL Java_com_ryangame_pet_gl_GL2JNILib_step(JNIEnv * env, jobject obj, jobject platformObj);
 JNIEXPORT void JNICALL Java_com_ryangame_pet_gl_GL2JNILib_destroy(JNIEnv *env, jobject obj, jobject platformObj);
 JNIEXPORT jobject JNICALL Java_com_ryangame_pet_gl_GL2JNILib_getGlobalData(JNIEnv *env, jobject obj, jobject platformObj);

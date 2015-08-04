@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.ryangame.pet.gl.GL2JNILib;
+import com.ryangame.pet.gl.Platform;
+
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.app.Service;
@@ -17,16 +20,12 @@ import android.os.IBinder;
 import android.util.Log;
 
 public class FloatWindowService extends Service {
-
+	public static Platform globalData = null;
 	/**
 	 * 用于在线程中创建或移除悬浮窗。
 	 */
 	private Handler handler = new Handler();
 
-	/**
-	 * 定时器，定时进行检测当前应该创建还是移除悬浮窗。
-	 */
-	private Timer timer;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -35,11 +34,8 @@ public class FloatWindowService extends Service {
 //	Log.e(null, "xxxxxxxxxxx");
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		// 开启定时器，每隔0.5秒刷新一次
-//		if (timer == null) {
-//			timer = new Timer();
-//			timer.scheduleAtFixedRate(new RefreshTask(), 0, 500);
-//		}
+		globalData = new Platform();
+		GL2JNILib.create(globalData);
 		GameWindowManager.createPetView(getApplicationContext());
 		return super.onStartCommand(intent, flags, startId);
 	}
@@ -47,12 +43,9 @@ public class FloatWindowService extends Service {
 	@Override
 	public void onDestroy() {
 		GameWindowManager.destroy(getApplicationContext());
+		GL2JNILib.destroy(globalData);
+		globalData = null;
 		super.onDestroy();
-		// Service被终止的同时也停止定时器继续运行
-		if (null != timer) {
-			timer.cancel();
-			timer = null;
-		}
 	}
 
 	class RefreshTask extends TimerTask {
