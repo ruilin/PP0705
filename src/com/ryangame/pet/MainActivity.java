@@ -53,7 +53,7 @@ public class MainActivity extends Activity {
 			public void onClick(View arg0) {
 				if (!isClickable) {
 					if (null != toast) toast.cancel();
-					toast = Toast.makeText(getApplicationContext(), "宠物加载中...请稍等！！", 500);
+					toast = Toast.makeText(getApplicationContext(), "游戏加载中...请稍等!!", 500);
 					toast.show();
 				} else if (isServiceWork(mActivity, mActivity.getPackageName() + ".FloatWindowService")) {
 					Intent intent = new Intent(MainActivity.this,

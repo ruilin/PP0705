@@ -84,6 +84,7 @@ PRIVATE void _updateToNativeC(JNIEnv *env, jobject platformObj) {
 
 JNIEXPORT void JNICALL Java_com_ryangame_pet_gl_GL2JNILib_create(JNIEnv * env, jobject obj, jobject platformObj) {
 	is2DMode = TRUE;
+	if (NULL ==  env) LOGE("XXXXXXXXXXX");
 	engine = engine_init(env);
 	engine->state = 99;
 	engine->gametime = time_util_now_ms();

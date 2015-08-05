@@ -6,14 +6,14 @@ public class AppContext extends Application {
 
 	private static AppContext instance;
 
-	public static AppContext getInstance() {
-		return instance;
-	}
-
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		instance = this;
+	}
+
+	public static AppContext getInstance() {
+		return (AppContext) (null != instance ? instance : FloatWindowService.instance.getApplication());
 	}
 
 }

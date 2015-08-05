@@ -20,13 +20,19 @@ import android.os.IBinder;
 import android.util.Log;
 
 public class FloatWindowService extends Service {
+	public static FloatWindowService instance;
 	public static Platform globalData = null;
 	/**
 	 * 用于在线程中创建或移除悬浮窗。
 	 */
 	private Handler handler = new Handler();
 
-
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		instance = this;
+	}
+	
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;

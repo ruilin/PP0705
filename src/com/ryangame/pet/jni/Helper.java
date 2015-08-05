@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -24,19 +25,17 @@ public class Helper {
 	private static Canvas mCanvas = null;
 	private static Paint mPaint = null;
 	private static Activity mActivity = null;
-	private static AppContext mApp = null;
 	public static void init(Activity act) {
 		mCanvas = new Canvas();
 		mPaint = new Paint();
 		mActivity = act;
-		mApp = AppContext.getInstance();
 	}
     
 	public static Bitmap getAssetBitmap(String filename) {
     	Bitmap bmp = null;
     	try {
     		long st = System.currentTimeMillis();
-			bmp = BitmapFactory.decodeStream(mApp.getAssets().open(filename));
+			bmp = BitmapFactory.decodeStream(AppContext.getInstance().getAssets().open(filename));
 			Log.e(null, "time   load bitmap " + (System.currentTimeMillis() - st));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -51,7 +50,8 @@ public class Helper {
     }
     
     public static AssetManager getAssetManager() {
-     	return mApp.getAssets();
+    	if (null == AppContext.getInstance()) Log.e(null, "xxxxxxxxx nulllllll");
+     	return AppContext.getInstance().getAssets();
     }
     
     private final static byte TEXT_STYLE_FILL				= 0;
@@ -141,7 +141,7 @@ public class Helper {
 		return bitmap;
 	}
 	
-	private static String getAppName(Activity app) {
+	private static String getAppName(AppContext app) {
 		String appName;
 	    try {
 	    	appName = (String)app.getPackageManager().getApplicationLabel(app.getPackageManager().getApplicationInfo(app.getPackageName(), 0));
@@ -152,7 +152,7 @@ public class Helper {
 	    return appName;
 	}
 	
-	private static long getVersion(Activity app) {
+	private static long getVersion(AppContext app) {
 	    int version = 0;
 	    try {
 	        PackageInfo pInfo = app.getPackageManager().getPackageInfo(app.getPackageName(), PackageManager.GET_META_DATA);
@@ -163,10 +163,9 @@ public class Helper {
 	    return (long)version;
 	}
 	
-	@SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")
 	public static void getSysInfo(String output[], long outputLong[]) {
-		Activity app = mActivity;
+		AppContext app = AppContext.getInstance();
 		output[0] = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/" +  app.getPackageName();
 		output[1] = Environment.getRootDirectory().getAbsolutePath();
 		output[2] = Environment.getDataDirectory().getAbsolutePath();
@@ -183,7 +182,7 @@ public class Helper {
 		output[13] = app.getApplicationInfo().processName;
 		output[14] = app.getApplicationInfo().publicSourceDir;
 		output[15] = app.getApplicationInfo().sourceDir;
-		output[16] = app.getCallingPackage();
+		output[16] = "app.getCallingPackage() == null";
 		output[17] = Build.BOARD;
 		output[18] = Build.BOOTLOADER;
 		output[19] = Build.BRAND;
@@ -207,7 +206,7 @@ public class Helper {
 		output[37] = String.valueOf(Build.VERSION.SDK_INT);
 		output[38] = getAppName(app);
 
-		outputLong[0] = app.getTaskId();
+		outputLong[0] = 0; //app.getTaskId()
 		outputLong[1] = (Environment.isExternalStorageRemovable() ? 1 : 0);	// 0 = false, 1 = true
 		outputLong[2] = getVersion(app);
 		
