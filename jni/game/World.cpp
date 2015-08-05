@@ -30,6 +30,6 @@ void renderer_end(Engine *engine) {
 void renderer_draw(Engine *engine, Graphic *g) {
 	canvas_renderTest(g);
 //	canvas_clear(0.0f, 0.0f, 0.0f, 0.0f);
-	s->drawFrame(g, 60, 60, 1.0f, 1.0f, 1.0f, 1.0f);
+//	s->drawFrame(g, 60, 60, 1.0f, 1.0f, 1.0f, 1.0f);
 	return;
 }

@@ -218,7 +218,7 @@ PRIVATE BOOL canvas_setShader() {
     return TRUE;
 }
 
-PRIVATE BOOL canvas_drawMatrix(Graphic *g, unsigned int x, unsigned int y, unsigned int POTW, unsigned int POTH) {
+PRIVATE BOOL canvas_drawMatrix(Graphic *g, unsigned int x, unsigned int y, unsigned int POTW, unsigned int POTH, float ratioSX, float ratioSY, float ratioEX, float ratioEY) {
     /*-- VBO --*/
     /*
     GLuint vbo[2];
@@ -236,15 +236,20 @@ PRIVATE BOOL canvas_drawMatrix(Graphic *g, unsigned int x, unsigned int y, unsig
     /* 屏幕左边转 Opengl 世界坐标 */
     float screenX = 0.0, screenY = 0.0;
     float POSX, POSY;
-    float LT = 1.0;
+//    float ratioX = 0.0;
+//    float ratioY = 0.0;
+//    float ratioW = 0.5;
+//    float ratioH = 0.8;
     POSX = x;
     POSY = y;
+    POTW *= ratioEX;
+    POTH *= ratioEY;
     Vertex texVerData[4] =
     {
-    	{{POSX,					POSY},					{g->vColor[0][0],g->vColor[0][1],g->vColor[0][2],g->vColor[0][3]},	{0,0}},
-    	{{POSX + POTW,	POSY},					{g->vColor[1][0],g->vColor[1][1],g->vColor[1][2],g->vColor[1][3]},	{LT,0}},
-    	{{POSX,					POSY + POTH},	{g->vColor[2][0],g->vColor[2][1],g->vColor[2][2],g->vColor[2][3]},	{0,LT}},
-    	{{POSX + POTW,	POSY + POTH},	{g->vColor[3][0],g->vColor[3][1],g->vColor[3][2],g->vColor[3][3]},	{LT,LT}},
+    	{{POSX,					POSY},					{g->vColor[0][0],g->vColor[0][1],g->vColor[0][2],g->vColor[0][3]},	{ratioSX,	ratioSY}},			/* LeftTop */
+    	{{POSX + POTW,	POSY},					{g->vColor[1][0],g->vColor[1][1],g->vColor[1][2],g->vColor[1][3]},	{ratioEX,	ratioSY}},			/* RightTop */
+    	{{POSX,					POSY + POTH},	{g->vColor[2][0],g->vColor[2][1],g->vColor[2][2],g->vColor[2][3]},	{ratioSX,	ratioEY}},			/* LeftBottom */
+    	{{POSX + POTW,	POSY + POTH},	{g->vColor[3][0],g->vColor[3][1],g->vColor[3][2],g->vColor[3][3]},	{ratioEX,	ratioEY}},			/* RightBottom */
     };
     int i;
     for (i = 0; i < 4; i++) {
@@ -372,13 +377,21 @@ PUBLIC void canvas_drawBitmap(Texture *tex, Graphic *g, int x, int y) {
     GL_ENABLE_TEXTURE();
     canvas_bindTexture(g, tex);
     graphic_setSingleColor(g, 1.0f, 1.0f, 1.0f, 1.0f);
-    canvas_drawMatrix(g, x, y, tex->widthPOT, tex->heightPOT);
+    canvas_drawMatrix(g, x, y, tex->widthPOT, tex->heightPOT, 0.0f, 0.0f, 1.0f, 1.0f);
+    return;
+}
+
+PUBLIC void canvas_drawBitmapClipRatio(Texture *tex, Graphic *g, int x, int y, float ratioSX, float ratioSY, float ratioEX, float ratioEY) {
+    GL_ENABLE_TEXTURE();
+    canvas_bindTexture(g, tex);
+    graphic_setSingleColor(g, 1.0f, 1.0f, 1.0f, 1.0f);
+    canvas_drawMatrix(g, x, y, tex->widthPOT * (ratioEX - ratioSX), tex->heightPOT * (ratioEY - ratioSY), ratioSX, ratioSY, ratioEX, ratioEY);
     return;
 }
 
 PUBLIC void canvas_renderTest(Graphic *g) {
-	canvas_clear(0.0f, 0.0f, 0.0f, 0.0f);
-//	canvas_clear(0.5f, 0.5f, 0.5f, 1.0f);
+//	canvas_clear(0.0f, 0.0f, 0.0f, 0.0f);
+	canvas_clear(0.5f, 0.5f, 0.5f, 1.0f);
     /*glDrawArrays(GL_TRIANGLES, 0, 6);*/
 	canvas_drawBitmap(tex, g, 1, 1);
 }
