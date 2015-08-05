@@ -46,7 +46,7 @@ typedef struct Image {
 	unsigned int widthPOT;
 	unsigned int heightPOT;
 	unsigned short usedCount;	/* 被占用的个数 */
-	BOOL isBinded;
+	BOOL isGenFormGL;
 } Texture;
 
 unsigned char *image_readPng(const char* filePath);

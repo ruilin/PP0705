@@ -197,7 +197,7 @@ PRIVATE void _image_init(Texture *tex, IMG_TYPE type) {
 	tex->texId = -1;
 	tex->type = type;
 	tex->callback_deleteBind = NULL;
-	tex->isBinded = FALSE;
+	tex->isGenFormGL = FALSE;
 	tex->width = tex->height = tex->widthPOT = tex->heightPOT = 0;
 	tex->size = 0;
 	tex->bytesPerPixel = 4;

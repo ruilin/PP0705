@@ -298,7 +298,7 @@ PRIVATE void canvas_recyleTexture(void *img) {
 	if (NULL == img) return;
 	unsigned int texId;
 	Texture *tex = (Texture *)img;
-	tex->isBinded = FALSE;
+	tex->isGenFormGL = FALSE;
 	glDeleteTextures(1, &texId);
 	return;
 }
@@ -308,42 +308,38 @@ PRIVATE GLuint canvas_bindTexture(Graphic *g, Texture *tex) {
 		LOGE("canvas_genTexture() NULL == g || NULL == tex");
 		return -1;
 	}
-	if (0 == LastTexId || tex->texId != LastTexId) {
-		glDeleteTextures(1, &LastTexId);
-	} else {
-		goto _exit;
-	}
-	if (TRUE == tex->isBinded) {
-		goto _exit;
-	}
-	glGenTextures(1, &(tex->texId));
-	glBindTexture(GL_TEXTURE_2D, tex->texId);
-	tex->isBinded = TRUE;
-	LastTexId = tex->texId;
+	if (FALSE == tex->isGenFormGL) {
+		glGenTextures(1, &(tex->texId));
+		glBindTexture(GL_TEXTURE_2D, tex->texId);
+		tex->isGenFormGL = TRUE;
 
-	switch (tex->bytesPerPixel) {
-	case 4:
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->widthPOT, tex->heightPOT, 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid *)(tex->pixels));
-		break;
-	case 2:
-		/* rgb_565 not tested */
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex->widthPOT, tex->heightPOT, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, (GLvoid *)(tex->pixels));
-		break;
-	case 1:
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, tex->widthPOT, tex->heightPOT, 0, GL_ALPHA, GL_UNSIGNED_BYTE, (GLvoid *)(tex->pixels));
-		break;
-	default:
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->widthPOT, tex->heightPOT, 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid *)(tex->pixels));
-		break;
+		switch (tex->bytesPerPixel) {
+		case 4:
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->widthPOT, tex->heightPOT, 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid *)(tex->pixels));
+			break;
+		case 2:
+			/* rgb_565 not tested */
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex->widthPOT, tex->heightPOT, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, (GLvoid *)(tex->pixels));
+			break;
+		case 1:
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, tex->widthPOT, tex->heightPOT, 0, GL_ALPHA, GL_UNSIGNED_BYTE, (GLvoid *)(tex->pixels));
+			break;
+		default:
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->widthPOT, tex->heightPOT, 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid *)(tex->pixels));
+			break;
+		}
+		/* 设置纹理参数 */
+		/* 设定缩小和放大过滤模式 */
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _TEX_QUALITY_PARAMETERS[tex->quality].minFilter);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _TEX_QUALITY_PARAMETERS[tex->quality].magFilter);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _TEX_QUALITY_PARAMETERS[tex->quality].wrapModeS);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _TEX_QUALITY_PARAMETERS[tex->quality].wrapModeT);
+		image_setCallBackFun(tex, canvas_recyleTexture);
 	}
-	/* 设置纹理参数 */
-	/* 设定缩小和放大过滤模式 */
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _TEX_QUALITY_PARAMETERS[tex->quality].minFilter);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _TEX_QUALITY_PARAMETERS[tex->quality].magFilter);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _TEX_QUALITY_PARAMETERS[tex->quality].wrapModeS);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _TEX_QUALITY_PARAMETERS[tex->quality].wrapModeT);
-	image_setCallBackFun(tex, canvas_recyleTexture);
-_exit:
+	if (-1 == LastTexId || tex->texId != LastTexId) {
+		glBindTexture(GL_TEXTURE_2D, tex->texId);
+		LastTexId = tex->texId;
+	}
 	return tex->texId;
 }
 
@@ -352,7 +348,7 @@ _exit:
 
 PUBLIC void canvas_init(int screenWidth, int screenHeight,
 						unsigned short canvasWidth, unsigned short canvasHeight) {
-	LastTexId = 0;
+	LastTexId = -1;
     glViewport(0, 0, screenWidth, screenHeight);
     checkGlError("glViewport");
     /* 开启 alpha blend：支持贴图背景透明 */
@@ -364,12 +360,12 @@ PUBLIC void canvas_init(int screenWidth, int screenHeight,
      */
 	canvas_setShader();
 
-//	tex = (Texture *)res_newPngPOT("cat.png", IMG_QUALITY_LINEAR);
+	tex = (Texture *)res_newPngPOT("cat.png", IMG_QUALITY_LINEAR);
 	return;
 }
 
 PUBLIC void canvas_end() {
-//	res_releasePng(tex);
+	res_releasePng(tex);
 }
 
 PUBLIC void canvas_drawBitmap(Texture *tex, Graphic *g, int x, int y) {
@@ -384,7 +380,7 @@ PUBLIC void canvas_renderTest(Graphic *g) {
 	canvas_clear(0.0f, 0.0f, 0.0f, 0.0f);
 //	canvas_clear(0.5f, 0.5f, 0.5f, 1.0f);
     /*glDrawArrays(GL_TRIANGLES, 0, 6);*/
-//	canvas_drawBitmap(tex, g, 1, 1);
+	canvas_drawBitmap(tex, g, 1, 1);
 }
 
 

@@ -11,8 +11,6 @@ Sprite *s;
 
 BOOL logic_init(Engine *engine) {
 	s = new Sprite(4, NULL);
-
-//	LOGE("Xxxxxxxxxxxxx  %s  %u", __FILE__, __LINE__);
 	return TRUE;
 }
 
@@ -30,8 +28,8 @@ void renderer_end(Engine *engine) {
 	return;
 }
 void renderer_draw(Engine *engine, Graphic *g) {
-	canvas_clear(0.0f, 0.0f, 0.0f, 0.0f);
+	canvas_renderTest(g);
+//	canvas_clear(0.0f, 0.0f, 0.0f, 0.0f);
 	s->drawFrame(g, 60, 60, 1.0f, 1.0f, 1.0f, 1.0f);
-//	canvas_renderTest(g);
 	return;
 }
