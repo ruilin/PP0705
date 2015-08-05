@@ -234,16 +234,9 @@ PRIVATE BOOL canvas_drawMatrix(Graphic *g, unsigned int x, unsigned int y, unsig
     glVertexAttribPointer(gvColorHandle, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
 	*/
     /* 屏幕左边转 Opengl 世界坐标 */
-    float screenX = 0.0, screenY = 0.0;
     float POSX, POSY;
-//    float ratioX = 0.0;
-//    float ratioY = 0.0;
-//    float ratioW = 0.5;
-//    float ratioH = 0.8;
     POSX = x;
     POSY = y;
-    POTW *= ratioEX;
-    POTH *= ratioEY;
     Vertex texVerData[4] =
     {
     	{{POSX,					POSY},					{g->vColor[0][0],g->vColor[0][1],g->vColor[0][2],g->vColor[0][3]},	{ratioSX,	ratioSY}},			/* LeftTop */
@@ -251,6 +244,13 @@ PRIVATE BOOL canvas_drawMatrix(Graphic *g, unsigned int x, unsigned int y, unsig
     	{{POSX,					POSY + POTH},	{g->vColor[2][0],g->vColor[2][1],g->vColor[2][2],g->vColor[2][3]},	{ratioSX,	ratioEY}},			/* LeftBottom */
     	{{POSX + POTW,	POSY + POTH},	{g->vColor[3][0],g->vColor[3][1],g->vColor[3][2],g->vColor[3][3]},	{ratioEX,	ratioEY}},			/* RightBottom */
     };
+//    Vertex texVerData[4] =
+//    {
+//    	{{POSX + POTW,	POSY},					{g->vColor[0][0],g->vColor[0][1],g->vColor[0][2],g->vColor[0][3]},	{ratioSX,	ratioSY}},			/* LeftTop */
+//    	{{POSX,					POSY},					{g->vColor[1][0],g->vColor[1][1],g->vColor[1][2],g->vColor[1][3]},	{ratioEX,	ratioSY}},			/* RightTop */
+//    	{{POSX + POTW,	POSY + POTH},	{g->vColor[2][0],g->vColor[2][1],g->vColor[2][2],g->vColor[2][3]},	{ratioSX,	ratioEY}},			/* LeftBottom */
+//    	{{POSX,					POSY + POTH},	{g->vColor[3][0],g->vColor[3][1],g->vColor[3][2],g->vColor[3][3]},	{ratioEX,	ratioEY}},			/* RightBottom */
+//    };
     int i;
     for (i = 0; i < 4; i++) {
     	texVerData[i].Position[0] = texVerData[i].Position[0] * 2 / engine_get()->screenWidth - 1.0f;
@@ -393,7 +393,8 @@ PUBLIC void canvas_renderTest(Graphic *g) {
 //	canvas_clear(0.0f, 0.0f, 0.0f, 0.0f);
 	canvas_clear(0.5f, 0.5f, 0.5f, 1.0f);
     /*glDrawArrays(GL_TRIANGLES, 0, 6);*/
-	canvas_drawBitmap(tex, g, 1, 1);
+	canvas_drawBitmap(tex, g, 100, 100);
+	canvas_drawBitmapClipRatio(tex, g, 1, 1, 0.0, 0.2, 1.0, 0.8);
 }
 
 
