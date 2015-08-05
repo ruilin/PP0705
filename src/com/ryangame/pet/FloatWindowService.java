@@ -40,13 +40,21 @@ public class FloatWindowService extends Service {
 		return super.onStartCommand(intent, flags, startId);
 	}
 
-	@Override
-	public void onDestroy() {
+	private void end() {
 		GameWindowManager.destroy(getApplicationContext());
 		GL2JNILib.destroy(globalData);
 		globalData = null;
-		super.onDestroy();
 	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		end();
+	}
+	
+	public void onTaskRemoved(Intent rootIntent) {
+		end();
+	};
 
 	class RefreshTask extends TimerTask {
 

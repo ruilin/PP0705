@@ -1,7 +1,10 @@
 package com.ryangame.pet;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -12,21 +15,23 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
-import com.ryangame.pet.gl.GL2JNILib;
-import com.ryangame.pet.gl.PetView;
-import com.ryangame.pet.gl.Platform;
 import com.ryangame.pet.jni.Helper;
 
 public class MainActivity extends Activity {
 	public static Activity mActivity;
+	boolean isClickable = true;
+	Timer clickTimer = null;
+	TimerTask task = null;
+	Toast toast = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mActivity = this;
 		Helper.init(this);
-		
+		clickTimer = new Timer(true);
 		setContentView(R.layout.activity_main);
 
 		Button btn_showPet = (Button) findViewById(R.id.show_pet);
@@ -37,23 +42,42 @@ public class MainActivity extends Activity {
 					Intent intent = new Intent(MainActivity.this,
 							FloatWindowService.class);
 					startService(intent);
+					setTimer();
 				}
 			}
 		});
 		Button btn_hidePet = (Button) findViewById(R.id.hide_pet);
 		btn_hidePet.setOnClickListener(new OnClickListener() {
+			@SuppressLint("ShowToast")
 			@Override
 			public void onClick(View arg0) {
-				if (isServiceWork(mActivity, mActivity.getPackageName() + ".FloatWindowService")) {
+				if (!isClickable) {
+					if (null != toast) toast.cancel();
+					toast = Toast.makeText(getApplicationContext(), "宠物加载中...请稍等！！", 500);
+					toast.show();
+				} else if (isServiceWork(mActivity, mActivity.getPackageName() + ".FloatWindowService")) {
 					Intent intent = new Intent(MainActivity.this,
 							FloatWindowService.class);
 					stopService(intent);
+					setTimer();
 				}
 			}
 		});
-		// GameWindowManager.createPetView(getApplicationContext());
 	}
 
+	private void setTimer() {
+		isClickable = false;
+		if (null != task) {
+			task.cancel();
+		}
+		task = new TimerTask() {
+			@Override
+			public void run() {
+				isClickable = true;
+			}
+		};
+		clickTimer.schedule(task, 500);
+	}
 	/**
 	 * 判断某个服务是否正在运行的方法
 	 * 
