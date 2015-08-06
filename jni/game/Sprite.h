@@ -29,6 +29,8 @@ public:
 	Sprite(unsigned short sprId, void *own);
 	virtual ~Sprite();
 	unsigned int getTileCount();
+	bool updateFrame(unsigned long long gametime,
+									unsigned int *frameCount);
 	bool drawFrame(Graphic *g, short x, short y,
 									float red, float green, float blue, float alpha);
 private:
@@ -67,6 +69,10 @@ private:
 									SpriteData_Frame_Tile **frameTile,
 									unsigned short *count);
 	SpriteData_Tile *getTile(SpriteData_Frame_Tile *frameTile);
+	unsigned long long getNextFrameGameTime(unsigned long long gametime);
+	void drawTile(Texture *tex, Graphic *g,
+							short drawX, short drawY,
+							const SpriteData_Tile *tile, SPRITE_TRANS trans);
 };
 
 #endif /* SPRITE_H_ */

@@ -78,13 +78,53 @@ SpriteData_Tile *Sprite::getTile(SpriteData_Frame_Tile *frameTile) {
 	return &(data->array_spriteTile[frameTile->tileIndex]);
 }
 
-void drawTile(Texture *tex, Graphic *g,
+unsigned long long Sprite::getNextFrameGameTime(unsigned long long gametime) {
+	SpriteData_Action *action = getCurAction();
+	SpriteData_Action_Frame actionFrame = action->array_actionFrame[curFrame];
+	return (gametime + (actionFrame.delayTime));
+}
+
+/*
+ * 更新帧
+ * return if frame roll end
+ */
+bool Sprite::updateFrame(unsigned long long gametime,
+											unsigned int *_frameCount) {
+	SpriteData_Action *action;
+	SpriteData_Action_Frame actionFrame;
+	short frameTime = -1;
+	BOOL ifChangedState = FALSE;
+	BOOL ifUpdateLoc = FALSE;		/* 是否通知调用者帧序列结束 */
+	if (0 == nextFrameTime) {
+		nextFrameTime = getNextFrameGameTime(gametime);
+	}
+	action = getCurAction();
+	if (NULL != _frameCount)
+		*_frameCount = action->frameCount;
+	frameCount = action->frameCount;
+	if (gametime < nextFrameTime) {
+		return FALSE;
+	}
+	if (TRUE == ifStop) {
+		return FALSE;
+	}
+	curFrame++;
+	if (curFrame == action->frameCount) {
+		curFrame = 0;
+	}
+	nextFrameTime = (-1 == frameTime) ?
+							getNextFrameGameTime(gametime) :
+							(gametime + frameTime);
+	return ifUpdateLoc;
+}
+
+void Sprite::drawTile(Texture *tex, Graphic *g,
 						short drawX, short drawY,
 						const SpriteData_Tile *tile, SPRITE_TRANS trans) {
 	switch (trans) {
 		case TRANS_MIRROR:
 		default:
-			canvas_drawBitmap(tex, g, drawX, drawY);
+			canvas_drawBitmapClipRatio(tex, g, drawX, drawY, tile->sxRatio, tile->syRatio, tile->exRatio, tile->eyRatio);
 			break;
 	}
 	return;
@@ -97,22 +137,21 @@ bool Sprite::drawFrame(Graphic *g, short x, short y,
     	SpriteData_Frame_Tile *frameTile;
     	unsigned short frameTileCount;
     	getFrameTile(0, &frameTile, &frameTileCount);
-    	int i;
-    	for (i = 0; i < frameTileCount; i++) {
+		graphic_setSingleColor(g, red, green, blue, alpha);
+    	for (int i = 0; i < frameTileCount; i++) {
 			SpriteData_Tile *spriteTile = getTile(&frameTile[i]);
-			graphic_setSingleColor(g, red, green, blue, alpha);
 			drawTile(resImg, g, x + frameTile[i].x,
 										y + frameTile[i].y, spriteTile, frameTile[i].trans);
-			graphic_setSingleColor(g, 1.0, 1.0, 1.0, 1.0);
 			/* 设置矩形区域 */
 			rect_set(&rect, x + frameTile[i].x, y + frameTile[i].y,
 					spriteTile->tileWdith, spriteTile->tileHeight);
 			/* TEST 画边框 */
 //			canvas_draw_Rect(g, &sprite->rect);
     	}
+		graphic_setSingleColor(g, 1.0, 1.0, 1.0, 1.0);
     	return true;
     }
-    canvas_drawBitmap(resImg, g, 10, 10);
+//    canvas_drawBitmap(resImg, g, 10, 10);
     return false;
 }
 
