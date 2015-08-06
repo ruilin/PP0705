@@ -4,12 +4,13 @@
  *  Created on: 2015年7月20日
  *      Author: ryan
  */
-#include "matrix.h"
-
 #include <stdlib.h>
 #include <math.h>
 
+#include "matrix.h"
+
 #define PI 3.1415926f
+
 #define normalize(x, y, z)                  \
 {                                               \
         float norm = 1.0f / sqrt(x*x+y*y+z*z);  \
@@ -17,13 +18,13 @@
 }
 #define I(_i, _j) ((_j)+4*(_i))
 
-void matrixSetIdentityM(float *m)
+PRIVATE void matrixSetIdentityM(float *m)
 {
         memset((void*)m, 0, 16*sizeof(float));
         m[0] = m[5] = m[10] = m[15] = 1.0f;
 }
 
-void matrixSetRotateM(float *m, float a, float x, float y, float z)
+PRIVATE void matrixSetRotateM(float *m, float a, float x, float y, float z)
 {
         float s, c;
 
@@ -67,7 +68,7 @@ void matrixSetRotateM(float *m, float a, float x, float y, float z)
         }
 }
 
-void matrixMultiplyMM(float *m, float *lhs, float *rhs)
+PRIVATE void matrixMultiplyMM(float *m, float *lhs, float *rhs)
 {
 		int i; float t[16];
         for (i = 0; i < 4; i++) {
@@ -92,7 +93,7 @@ void matrixMultiplyMM(float *m, float *lhs, float *rhs)
         memcpy(m, t, sizeof(t));
 }
 
-void matrixScaleM(float *m, float x, float y, float z)
+PUBLIC void matrixScaleM(float *m, float x, float y, float z)
 {
 		int i;
         for (i = 0; i < 4; i++)
@@ -101,7 +102,7 @@ void matrixScaleM(float *m, float x, float y, float z)
         }
 }
 
-void matrixTranslateM(float *m, float x, float y, float z)
+PUBLIC void matrixTranslateM(float *m, float x, float y, float z)
 {
 		int i;
         for (i = 0; i < 4; i++)
@@ -110,7 +111,7 @@ void matrixTranslateM(float *m, float x, float y, float z)
         }
 }
 
-void matrixRotateM(float *m, float a, float x, float y, float z)
+PUBLIC void matrixRotateM(float *m, float a, float x, float y, float z)
 {
         float rot[16], res[16];
         matrixSetRotateM(rot, a, x, y, z);
@@ -118,7 +119,7 @@ void matrixRotateM(float *m, float a, float x, float y, float z)
         memcpy(m, res, 16*sizeof(float));
 }
 
-void matrixLookAtM(float *m,
+PUBLIC void matrixLookAtM(float *m,
                 float eyeX, float eyeY, float eyeZ,
                 float cenX, float cenY, float cenZ,
                 float  upX, float  upY, float  upZ)
@@ -154,7 +155,7 @@ void matrixLookAtM(float *m,
         matrixTranslateM(m, -eyeX, -eyeY, -eyeZ);
 }
 
-void matrixFrustumM(float *m, float left, float right, float bottom, float top, float near, float far)
+PUBLIC void matrixFrustumM(float *m, float left, float right, float bottom, float top, float near, float far)
 {
         float r_width  = 1.0f / (right - left);
         float r_height = 1.0f / (top - bottom);

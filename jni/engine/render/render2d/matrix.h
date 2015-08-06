@@ -10,6 +10,13 @@
 
 #include <base.h>
 
-
+void matrixScaleM(float *m, float x, float y, float z);
+void matrixTranslateM(float *m, float x, float y, float z);
+void matrixRotateM(float *m, float a, float x, float y, float z);
+void matrixLookAtM(float *m,
+                float eyeX, float eyeY, float eyeZ,
+                float cenX, float cenY, float cenZ,
+                float  upX, float  upY, float  upZ);
+void matrixFrustumM(float *m, float left, float right, float bottom, float top, float near, float far);
 
 #endif /* MATRIX_H_ */
