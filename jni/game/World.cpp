@@ -10,7 +10,7 @@
 Sprite *s;
 
 BOOL logic_init(Engine *engine) {
-	s = new Sprite(4, NULL);
+	s = new Sprite(1000, NULL);
 	return TRUE;
 }
 
