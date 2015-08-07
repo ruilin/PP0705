@@ -7,7 +7,9 @@
 
 #include "canvas.h"
 
-PRIVATE const GLfloat PI = 3.1415927f;
+#define THETA(angle)	(3.14 * (angle) / 180)
+
+PRIVATE const GLfloat PI = 3.1415926f;
 PRIVATE inline float GET_ABS(float x) {return x>0?x:-x;}
 
 PUBLIC BOOL mTextureStateEnabled;
@@ -33,7 +35,7 @@ PRIVATE const struct _tex_quality_parameters _TEX_QUALITY_PARAMETERS[] = {
 	{GL_LINEAR	, GL_LINEAR , GL_CLAMP_TO_EDGE	, GL_CLAMP_TO_EDGE}
 };
 
-PRIVATE GLuint LastTexId;
+PRIVATE GLuint LastBindTexId;
 
 
 static void printGLString(const char *name, GLenum s) {
@@ -141,6 +143,7 @@ GLuint createProgram(const char* pVertexSource, const char* pFragmentSource) {
 GLuint gvPositionHandle;
 GLuint gvColorHandle;
 GLuint gvCoordHandle;
+GLuint mvpHandle;
 
 float vertercies[] =  { -1, -1,
 						  1, -1,
@@ -209,6 +212,7 @@ PRIVATE BOOL canvas_setShader() {
     gvPositionHandle = glGetAttribLocation(gProgram, "a_position");
     gvColorHandle = glGetAttribLocation(gProgram, "a_color");
     gvCoordHandle = glGetAttribLocation(gProgram, "a_coord");
+    mvpHandle = glGetUniformLocation(gProgram, "u_mvp");
     checkGlError("glGetAttribLocation");
     LOGI("glGetAttribLocation(\"a_position\") = %d\n",
             gvPositionHandle);
@@ -244,13 +248,6 @@ PRIVATE BOOL canvas_drawMatrix(Graphic *g, unsigned int x, unsigned int y, unsig
     	{{POSX,					POSY + POTH},	{g->vColor[2][0],g->vColor[2][1],g->vColor[2][2],g->vColor[2][3]},	{ratioSX,	ratioEY}},			/* LeftBottom */
     	{{POSX + POTW,	POSY + POTH},	{g->vColor[3][0],g->vColor[3][1],g->vColor[3][2],g->vColor[3][3]},	{ratioEX,	ratioEY}},			/* RightBottom */
     };
-//    Vertex texVerData[4] =
-//    {
-//    	{{POSX + POTW,	POSY},					{g->vColor[0][0],g->vColor[0][1],g->vColor[0][2],g->vColor[0][3]},	{ratioSX,	ratioSY}},			/* LeftTop */
-//    	{{POSX,					POSY},					{g->vColor[1][0],g->vColor[1][1],g->vColor[1][2],g->vColor[1][3]},	{ratioEX,	ratioSY}},			/* RightTop */
-//    	{{POSX + POTW,	POSY + POTH},	{g->vColor[2][0],g->vColor[2][1],g->vColor[2][2],g->vColor[2][3]},	{ratioSX,	ratioEY}},			/* LeftBottom */
-//    	{{POSX,					POSY + POTH},	{g->vColor[3][0],g->vColor[3][1],g->vColor[3][2],g->vColor[3][3]},	{ratioEX,	ratioEY}},			/* RightBottom */
-//    };
     int i;
     for (i = 0; i < 4; i++) {
     	texVerData[i].Position[0] = texVerData[i].Position[0] * 2 / engine_get()->screenWidth - 1.0f;
@@ -283,14 +280,22 @@ PRIVATE BOOL canvas_drawMatrix(Graphic *g, unsigned int x, unsigned int y, unsig
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, (GLvoid *)0);
 	glDeleteBuffers(1, vbo);
 	glDeleteBuffers(1, indexVBO);
+
+	GLfloat rotateData[] = { 	1, 0, 0, 0,
+											0, 1, 0, 0,
+											0, 0, 1, 0,
+											0, 0, 0, 1,
+										};
+	matrixRotateM(rotateData, 180, 0, 1, 0);
+	glUniformMatrix4fv(mvpHandle, 1, GL_FALSE, rotateData);
     return TRUE;
 }
 
 /* 绑定纹理 */
 PUBLIC BOOL canvas_bind_texture(GLuint texId) {
-	if (0 == LastTexId || texId != LastTexId) {
+	if (0 == LastBindTexId || texId != LastBindTexId) {
 		glBindTexture(GL_TEXTURE_2D, texId);
-		LastTexId = texId;
+		LastBindTexId = texId;
 		return TRUE;
 	}
 	return FALSE;
@@ -341,9 +346,9 @@ PRIVATE GLuint canvas_bindTexture(Graphic *g, Texture *tex) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _TEX_QUALITY_PARAMETERS[tex->quality].wrapModeT);
 		image_setCallBackFun(tex, canvas_recyleTexture);
 	}
-	if (-1 == LastTexId || tex->texId != LastTexId) {
+	if (-1 == LastBindTexId || tex->texId != LastBindTexId) {
 		glBindTexture(GL_TEXTURE_2D, tex->texId);
-		LastTexId = tex->texId;
+		LastBindTexId = tex->texId;
 	}
 	return tex->texId;
 }
@@ -353,7 +358,7 @@ PRIVATE GLuint canvas_bindTexture(Graphic *g, Texture *tex) {
 
 PUBLIC void canvas_init(int screenWidth, int screenHeight,
 						unsigned short canvasWidth, unsigned short canvasHeight) {
-	LastTexId = -1;
+	LastBindTexId = -1;
     glViewport(0, 0, screenWidth, screenHeight);
     checkGlError("glViewport");
     /* 开启 alpha blend：支持贴图背景透明 */

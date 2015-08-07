@@ -93,8 +93,7 @@ PRIVATE void matrixMultiplyMM(float *m, float *lhs, float *rhs)
         memcpy(m, t, sizeof(t));
 }
 
-PUBLIC void matrixScaleM(float *m, float x, float y, float z)
-{
+PUBLIC void matrixScaleM(float *m, float x, float y, float z) {
 		int i;
         for (i = 0; i < 4; i++)
         {
@@ -102,8 +101,7 @@ PUBLIC void matrixScaleM(float *m, float x, float y, float z)
         }
 }
 
-PUBLIC void matrixTranslateM(float *m, float x, float y, float z)
-{
+PUBLIC void matrixTranslateM(float *m, float x, float y, float z) {
 		int i;
         for (i = 0; i < 4; i++)
         {
@@ -111,8 +109,7 @@ PUBLIC void matrixTranslateM(float *m, float x, float y, float z)
         }
 }
 
-PUBLIC void matrixRotateM(float *m, float a, float x, float y, float z)
-{
+PUBLIC void matrixRotateM(float *m, float a, float x, float y, float z) {
         float rot[16], res[16];
         matrixSetRotateM(rot, a, x, y, z);
         matrixMultiplyMM(res, m, rot);
@@ -120,10 +117,9 @@ PUBLIC void matrixRotateM(float *m, float a, float x, float y, float z)
 }
 
 PUBLIC void matrixLookAtM(float *m,
-                float eyeX, float eyeY, float eyeZ,
-                float cenX, float cenY, float cenZ,
-                float  upX, float  upY, float  upZ)
-{
+												float eyeX, float eyeY, float eyeZ,
+												float cenX, float cenY, float cenZ,
+												float  upX, float  upY, float  upZ) {
         float fx = cenX - eyeX;
         float fy = cenY - eyeY;
         float fz = cenZ - eyeZ;
@@ -155,8 +151,7 @@ PUBLIC void matrixLookAtM(float *m,
         matrixTranslateM(m, -eyeX, -eyeY, -eyeZ);
 }
 
-PUBLIC void matrixFrustumM(float *m, float left, float right, float bottom, float top, float near, float far)
-{
+PUBLIC void matrixFrustumM(float *m, float left, float right, float bottom, float top, float near, float far) {
         float r_width  = 1.0f / (right - left);
         float r_height = 1.0f / (top - bottom);
         float r_depth  = 1.0f / (near - far);
