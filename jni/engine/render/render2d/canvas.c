@@ -397,7 +397,7 @@ PUBLIC void canvas_renderTest(Graphic *g) {
 //	canvas_clear(0.0f, 0.0f, 0.0f, 0.0f);
 	canvas_clear(0.5f, 0.5f, 0.5f, 1.0f);
     /*glDrawArrays(GL_TRIANGLES, 0, 6);*/
-	canvas_drawBitmap(tex, g, 100, 100);
+//	canvas_drawBitmap(tex, g, 100, 100);
 	canvas_drawBitmapClipRatio(tex, g, 1, 1, 0.0, 0.2, 1.0, 0.8);
 }
 
