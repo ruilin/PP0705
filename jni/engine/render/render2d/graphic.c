@@ -24,6 +24,9 @@ PUBLIC Graphic *graphic_create() {
 	g->textRed_stroke = g->textGreen_stroke = g->textBlue_stroke = 0;
 	g->textAlpha_stroke = 255;
 	memset(g->vColor, 0, sizeof(g->vColor));
+
+	memcpy(g->matrix, ORIGIN_MATRIX, sizeof(ORIGIN_MATRIX));
+	memcpy(g->matrix_save, ORIGIN_MATRIX, sizeof(ORIGIN_MATRIX));
 _exit:
 	return g;
 }

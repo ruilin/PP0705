@@ -84,14 +84,10 @@ PRIVATE void _updateToNativeC(JNIEnv *env, jobject platformObj) {
 
 JNIEXPORT void JNICALL Java_com_ryangame_pet_gl_GL2JNILib_create(JNIEnv * env, jobject obj, jobject platformObj) {
 	is2DMode = TRUE;
-	if (NULL ==  env) LOGE("XXXXXXXXXXX");
 	engine = engine_init(env);
 	engine->state = 99;
 	engine->gametime = time_util_now_ms();
 	LOGI("endian: %s", (ENDIAN_BIG == endian_get() ? "big" : "little"));
-
-	engine->screenWidth = 480;
-	engine->screenHeight = 800;
 	engine->linked_event = linked_list_create(motion_event_destroy);
 	/* logic */
 	runnable_init(engine);
@@ -100,10 +96,12 @@ JNIEXPORT void JNICALL Java_com_ryangame_pet_gl_GL2JNILib_create(JNIEnv * env, j
 }
 
 JNIEXPORT BOOL JNICALL Java_com_ryangame_pet_gl_GL2JNILib_init(JNIEnv * env, jobject obj, jobject platformObj,
-																		jint width, jint height) {
+																		jint screenWidth, jint screenHeight, jint viewWidth, jint viewHeight) {
 	if (NULL == engine) return FALSE;
-	engine->screenWidth = width;
-	engine->screenHeight = height;
+	engine->screenWidth = screenWidth;
+	engine->screenHeight = screenHeight;
+	engine->gameWidth = viewWidth;
+	engine->gameHeight = viewHeight;
     /* render */
     if (TRUE == is2DMode)
     	renderer2d_init(engine);

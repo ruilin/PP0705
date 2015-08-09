@@ -51,6 +51,7 @@ import android.view.MotionEvent;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 
+import com.ryangame.pet.AppContext;
 import com.ryangame.pet.FloatWindowService;
 import com.ryangame.pet.MainActivity;
 import com.ryangame.pet.view.MainMenu;
@@ -401,8 +402,8 @@ public class PetView extends GLSurfaceView {
         /* 横竖屏切换时 */
         public void onSurfaceChanged(GL10 gl, int width, int height) {
         	if (null == FloatWindowService.globalData) return;
-//            GL2JNILib.init(width, height);
-        	GL2JNILib.init(FloatWindowService.globalData, width, height);
+        	int screenSize[] = AppContext.getInstance().getScreenSize();
+        	GL2JNILib.init(FloatWindowService.globalData, screenSize[0], screenSize[1], width, height);
         }
 
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {

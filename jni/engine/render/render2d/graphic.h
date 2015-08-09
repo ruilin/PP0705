@@ -48,9 +48,15 @@ typedef struct Graphic {
 	int textGreen_stroke;
 	int textBlue_stroke;
 	int textAlpha_stroke;
-
 	float vColor[4][4];
+	GLfloat matrix_save[16];
+	GLfloat matrix[16];
 } Graphic;
+
+static GLfloat ORIGIN_MATRIX[] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
+
+#define graphic_pushMatrix(g) ( memcpy(g->matrix_save, g->matrix, sizeof(g->matrix)) )
+#define graphic_popMatrix(g) ( memcpy(g->matrix, g->matrix_save, sizeof(g->matrix)) )
 
 Graphic *graphic_create();
 void graphic_destroy(Graphic *g);

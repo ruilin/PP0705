@@ -222,75 +222,6 @@ PRIVATE BOOL canvas_setShader() {
     return TRUE;
 }
 
-PRIVATE BOOL canvas_drawMatrix(Graphic *g, unsigned int x, unsigned int y, unsigned int POTW, unsigned int POTH, float ratioSX, float ratioSY, float ratioEX, float ratioEY) {
-    /*-- VBO --*/
-    /*
-    GLuint vbo[2];
-    glGenBuffers(2, vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertercies), vertercies, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(gvPositionHandle);
-    glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vcolor), vcolor, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(gvColorHandle);
-    glVertexAttribPointer(gvColorHandle, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
-	*/
-    /* 屏幕左边转 Opengl 世界坐标 */
-    float POSX, POSY;
-    POSX = x;
-    POSY = y;
-    Vertex texVerData[4] =
-    {
-    	{{POSX,					POSY},					{g->vColor[0][0],g->vColor[0][1],g->vColor[0][2],g->vColor[0][3]},	{ratioSX,	ratioSY}},			/* LeftTop */
-    	{{POSX + POTW,	POSY},					{g->vColor[1][0],g->vColor[1][1],g->vColor[1][2],g->vColor[1][3]},	{ratioEX,	ratioSY}},			/* RightTop */
-    	{{POSX,					POSY + POTH},	{g->vColor[2][0],g->vColor[2][1],g->vColor[2][2],g->vColor[2][3]},	{ratioSX,	ratioEY}},			/* LeftBottom */
-    	{{POSX + POTW,	POSY + POTH},	{g->vColor[3][0],g->vColor[3][1],g->vColor[3][2],g->vColor[3][3]},	{ratioEX,	ratioEY}},			/* RightBottom */
-    };
-    int i;
-    for (i = 0; i < 4; i++) {
-    	texVerData[i].Position[0] = texVerData[i].Position[0] * 2 / engine_get()->screenWidth - 1.0f;
-    	texVerData[i].Position[1] = texVerData[i].Position[1] * -2 / engine_get()->screenHeight + 1.0f;
-    }
-    GLuint vbo[1];
-    glGenBuffers(1, vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(texVerData), texVerData, GL_STATIC_DRAW);
-
-    glEnableVertexAttribArray(gvPositionHandle);
-    glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (GLvoid *)0);
-
-    glEnableVertexAttribArray(gvColorHandle);
-    glVertexAttribPointer(gvColorHandle, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (GLvoid *)(sizeof(float) * 2));
-
-    glEnableVertexAttribArray(gvCoordHandle);
-    glVertexAttribPointer(gvCoordHandle, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (GLvoid *)(sizeof(float) * 6));
-    /*glVertexAttribPointer(gvColorHandle, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 7, (GLvoid *)(sizeof(float) * 3));*/
-
-    /* 指定索引数据，才可以用 glDrawElements() 绘制；使用 glDrawArrays() 则不需要 */
-    GLuint indexVBO[1];
-    glGenBuffers(1, indexVBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexVBO[0]);
-	GLubyte indices[] = {
-							0,1,2,  	//第一个三角形索引
-							2,3,1 	//第二个三角形索引
-						};
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, (GLvoid *)0);
-	glDeleteBuffers(1, vbo);
-	glDeleteBuffers(1, indexVBO);
-
-	GLfloat rotateData[] = { 	1, 0, 0, 0,
-											0, 1, 0, 0,
-											0, 0, 1, 0,
-											0, 0, 0, 1,
-										};
-	matrixRotateM(rotateData, 180, 0, 1, 0);
-	glUniformMatrix4fv(mvpHandle, 1, GL_FALSE, rotateData);
-    return TRUE;
-}
-
 /* 绑定纹理 */
 PUBLIC BOOL canvas_bind_texture(GLuint texId) {
 	if (0 == LastBindTexId || texId != LastBindTexId) {
@@ -359,7 +290,7 @@ PRIVATE GLuint canvas_bindTexture(Graphic *g, Texture *tex) {
 PUBLIC void canvas_init(int screenWidth, int screenHeight,
 						unsigned short canvasWidth, unsigned short canvasHeight) {
 	LastBindTexId = -1;
-    glViewport(0, 0, screenWidth, screenHeight);
+    glViewport(0, 0, canvasWidth, canvasHeight);
     checkGlError("glViewport");
     /* 开启 alpha blend：支持贴图背景透明 */
     glEnable(GL_BLEND);
@@ -378,6 +309,69 @@ PUBLIC void canvas_end() {
 	res_releasePng(tex);
 }
 
+PRIVATE BOOL canvas_drawMatrix(Graphic *g, unsigned int x, unsigned int y, unsigned int POTW, unsigned int POTH, float ratioSX, float ratioSY, float ratioEX, float ratioEY) {
+    /*-- VBO --*/
+    /*
+    GLuint vbo[2];
+    glGenBuffers(2, vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertercies), vertercies, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(gvPositionHandle);
+    glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vcolor), vcolor, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(gvColorHandle);
+    glVertexAttribPointer(gvColorHandle, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid *)0);
+	*/
+    /* 屏幕左边转 Opengl 世界坐标 */
+    float POSX, POSY;
+    POSX = x;
+    POSY = y;
+    Vertex texVerData[4] =
+    {
+    	{{POSX,					POSY},					{g->vColor[0][0],g->vColor[0][1],g->vColor[0][2],g->vColor[0][3]},	{ratioSX,	ratioSY}},			/* LeftTop */
+    	{{POSX + POTW,	POSY},					{g->vColor[1][0],g->vColor[1][1],g->vColor[1][2],g->vColor[1][3]},	{ratioEX,	ratioSY}},			/* RightTop */
+    	{{POSX,					POSY + POTH},	{g->vColor[2][0],g->vColor[2][1],g->vColor[2][2],g->vColor[2][3]},	{ratioSX,	ratioEY}},			/* LeftBottom */
+    	{{POSX + POTW,	POSY + POTH},	{g->vColor[3][0],g->vColor[3][1],g->vColor[3][2],g->vColor[3][3]},	{ratioEX,	ratioEY}},			/* RightBottom */
+    };
+    int i;
+    for (i = 0; i < 4; i++) {
+    	texVerData[i].Position[0] = texVerData[i].Position[0] * 2 / engine_get()->gameWidth - 1.0f;
+    	texVerData[i].Position[1] = texVerData[i].Position[1] * -2 / engine_get()->gameHeight + 1.0f;
+    }
+    GLuint vbo[1];
+    glGenBuffers(1, vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(texVerData), texVerData, GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(gvPositionHandle);
+    glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (GLvoid *)0);
+
+    glEnableVertexAttribArray(gvColorHandle);
+    glVertexAttribPointer(gvColorHandle, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (GLvoid *)(sizeof(float) * 2));
+
+    glEnableVertexAttribArray(gvCoordHandle);
+    glVertexAttribPointer(gvCoordHandle, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (GLvoid *)(sizeof(float) * 6));
+    /*glVertexAttribPointer(gvColorHandle, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 7, (GLvoid *)(sizeof(float) * 3));*/
+
+    /* 指定索引数据，才可以用 glDrawElements() 绘制；使用 glDrawArrays() 则不需要 */
+    GLuint indexVBO[1];
+    glGenBuffers(1, indexVBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexVBO[0]);
+	GLubyte indices[] = {
+							0,1,2,  	//第一个三角形索引
+							2,3,1 	//第二个三角形索引
+						};
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, (GLvoid *)0);
+	glDeleteBuffers(1, vbo);
+	glDeleteBuffers(1, indexVBO);
+
+	glUniformMatrix4fv(mvpHandle, 1, GL_FALSE, g->matrix);
+    return TRUE;
+}
+
 PUBLIC void canvas_drawBitmap(Texture *tex, Graphic *g, int x, int y) {
     GL_ENABLE_TEXTURE();
     canvas_bindTexture(g, tex);
@@ -386,6 +380,7 @@ PUBLIC void canvas_drawBitmap(Texture *tex, Graphic *g, int x, int y) {
     return;
 }
 
+/* 裁剪图片 */
 PUBLIC void canvas_drawBitmapClipRatio(Texture *tex, Graphic *g, int x, int y, float ratioSX, float ratioSY, float ratioEX, float ratioEY) {
     GL_ENABLE_TEXTURE();
     canvas_bindTexture(g, tex);
@@ -397,7 +392,7 @@ PUBLIC void canvas_renderTest(Graphic *g) {
 //	canvas_clear(0.0f, 0.0f, 0.0f, 0.0f);
 	canvas_clear(0.5f, 0.5f, 0.5f, 1.0f);
     /*glDrawArrays(GL_TRIANGLES, 0, 6);*/
-//	canvas_drawBitmap(tex, g, 100, 100);
+	canvas_drawBitmap(tex, g, 100, 100);
 	canvas_drawBitmapClipRatio(tex, g, 1, 1, 0.0, 0.2, 1.0, 0.8);
 }
 
