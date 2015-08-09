@@ -123,11 +123,12 @@ void Sprite::drawTile(Texture *tex, Graphic *g,
 						const SpriteData_Tile *tile, SPRITE_TRANS trans) {
 	switch (trans) {
 		case TRANS_MIRROR:
-		default:
-//			graphic_pushMatrix(g);
-//			matrixRotateM(g->matrix, 180, 0, 1, 0);
+			graphic_pushMatrix(g);
+			graphic_rotate(g, 180, 0, 1, 0);
 			canvas_drawBitmapClipRatio(tex, g, engine_get()->gameWidth - drawX - (tex->width * (tile->exRatio - tile->sxRatio)), drawY, tile->sxRatio, tile->syRatio, tile->exRatio, tile->eyRatio);
-//			graphic_popMatrix(g);
+			graphic_popMatrix(g);
+		default:
+			canvas_drawBitmapClipRatio(tex, g, drawX, drawY, tile->sxRatio, tile->syRatio, tile->exRatio, tile->eyRatio);
 			break;
 	}
 	return;

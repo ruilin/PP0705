@@ -57,6 +57,7 @@ static GLfloat ORIGIN_MATRIX[] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
 
 #define graphic_pushMatrix(g) ( memcpy(g->matrix_save, g->matrix, sizeof(g->matrix)) )
 #define graphic_popMatrix(g) ( memcpy(g->matrix, g->matrix_save, sizeof(g->matrix)) )
+#define graphic_rotate(g, angle, x, y, z) ( matrixRotateM(g->matrix, angle, x, y, z) )
 
 Graphic *graphic_create();
 void graphic_destroy(Graphic *g);

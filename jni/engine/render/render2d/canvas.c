@@ -360,15 +360,15 @@ PRIVATE BOOL canvas_drawMatrix(Graphic *g, unsigned int x, unsigned int y, unsig
     glGenBuffers(1, indexVBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexVBO[0]);
 	GLubyte indices[] = {
-							0,1,2,  	//第一个三角形索引
-							2,3,1 	//第二个三角形索引
-						};
+										0,1,2,  	//第一个三角形索引
+										2,3,1 	//第二个三角形索引
+									};
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glUniformMatrix4fv(mvpHandle, 1, GL_FALSE, g->matrix);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, (GLvoid *)0);
+
 	glDeleteBuffers(1, vbo);
 	glDeleteBuffers(1, indexVBO);
-
-	glUniformMatrix4fv(mvpHandle, 1, GL_FALSE, g->matrix);
     return TRUE;
 }
 
