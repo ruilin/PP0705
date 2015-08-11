@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -20,15 +19,14 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.ryangame.pet.AppContext;
+import com.ryangame.pet.GameWindowManager;
 
 public class Helper {
 	private static Canvas mCanvas = null;
 	private static Paint mPaint = null;
-	private static Activity mActivity = null;
 	public static void init(Activity act) {
 		mCanvas = new Canvas();
 		mPaint = new Paint();
-		mActivity = act;
 	}
     
 	public static Bitmap getAssetBitmap(String filename) {
@@ -50,7 +48,6 @@ public class Helper {
     }
     
     public static AssetManager getAssetManager() {
-    	if (null == AppContext.getInstance()) Log.e(null, "xxxxxxxxx nulllllll");
      	return AppContext.getInstance().getAssets();
     }
     
@@ -211,5 +208,9 @@ public class Helper {
 		outputLong[2] = getVersion(app);
 		
 		return;
+	}
+	
+	public static void resetViewLayout(int x, int y, int w, int h) {
+		GameWindowManager.petView.resetLayout(x, y, w, h);
 	}
 }

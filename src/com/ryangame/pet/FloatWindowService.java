@@ -2,11 +2,7 @@ package com.ryangame.pet;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 import java.util.TimerTask;
-
-import com.ryangame.pet.gl.GL2JNILib;
-import com.ryangame.pet.gl.Platform;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
@@ -17,7 +13,9 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Handler;
 import android.os.IBinder;
-import android.util.Log;
+
+import com.ryangame.pet.gl.GL2JNILib;
+import com.ryangame.pet.gl.Platform;
 
 public class FloatWindowService extends Service {
 	public static FloatWindowService instance;

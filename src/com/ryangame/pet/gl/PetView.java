@@ -140,8 +140,13 @@ public class PetView extends GLSurfaceView {
         setRenderer(renderer);
     }
     
-    public void end() {
-//    	GL2JNILib.destroyWorld();
+    public void resetLayout(int x, int y, int w, int h) {
+		layoutParams.x = x;
+		layoutParams.y = y;
+		layoutParams.width = viewWidth;
+		layoutParams.height = viewHeight;
+		windowManager.updateViewLayout(this, layoutParams);
+//		GL2JNILib.init(FloatWindowService.globalData, screenSize[0], screenSize[1], w, h);
     }
     
 	@SuppressLint("ClickableViewAccessibility")

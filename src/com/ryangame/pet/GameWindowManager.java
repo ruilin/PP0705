@@ -13,7 +13,6 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.TextView;
 
-import com.ryangame.pet.view.MainMenu;
 import com.ryangame.pet.gl.PetView;
 
 public class GameWindowManager {
@@ -57,7 +56,6 @@ public class GameWindowManager {
 	}
 	
 	public static void destroy(Context context) {
-		petView.end();
 		WindowManager windowManager = getWindowManager(context);
 		windowManager.removeView(petView);
 		petView = null;
