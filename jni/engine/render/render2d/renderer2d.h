@@ -18,5 +18,6 @@
 void renderer2d_init(Engine *engine);
 void renderer2d_end(Engine *engine);
 void renderer2d_draw(Engine *engine);
+void renderer2d_reset(Engine *engine, unsigned short screenWidth, unsigned short screenHeight, unsigned short gameWidth, unsigned short gameHeight);
 
 #endif /* RENDERER2D_H_ */

@@ -111,6 +111,7 @@ bool Sprite::updateFrame(unsigned long long gametime,
 	curFrame++;
 	if (curFrame == action->frameCount) {
 		curFrame = 0;
+		ifUpdateLoc = TRUE;
 	}
 	nextFrameTime = (-1 == frameTime) ?
 							getNextFrameGameTime(gametime) :

@@ -16,6 +16,8 @@ import android.graphics.Paint;
 import android.graphics.Paint.FontMetrics;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.ryangame.pet.AppContext;
@@ -211,6 +213,15 @@ public class Helper {
 	}
 	
 	public static void resetViewLayout(int x, int y, int w, int h) {
-		GameWindowManager.petView.resetLayout(x, y, w, h);
+		Handler myHandler = new Handler(AppContext.getInstance().getMainLooper()) {  
+			public void handleMessage(Message msg) {
+				super.handleMessage(msg);
+				int param[] = (int[])msg.obj;
+				if (null != GameWindowManager.petView)
+					GameWindowManager.petView.resetLayout(param[0], param[1], param[2], param[3]);
+			}
+		};
+		Message msg = Message.obtain(myHandler, 0, new int[]{x, y, w, h});
+		msg.sendToTarget();
 	}
 }

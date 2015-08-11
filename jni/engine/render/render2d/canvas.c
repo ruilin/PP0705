@@ -287,9 +287,7 @@ PRIVATE GLuint canvas_bindTexture(Graphic *g, Texture *tex) {
 /*******************************************************************/
 #include "image.h"
 
-PUBLIC void canvas_init(int screenWidth, int screenHeight,
-						unsigned short canvasWidth, unsigned short canvasHeight) {
-	LastBindTexId = -1;
+PUBLIC inline void canvas_reset(unsigned short canvasWidth, unsigned short canvasHeight) {
     glViewport(0, 0, canvasWidth, canvasHeight);
     checkGlError("glViewport");
     /* 开启 alpha blend：支持贴图背景透明 */
@@ -300,6 +298,13 @@ PUBLIC void canvas_init(int screenWidth, int screenHeight,
      * glBlendFunc(GL_ONE, GL_ZERO); 		// 即只取源颜色，这也是默认值
      */
 	canvas_setShader();
+	return;
+}
+
+PUBLIC void canvas_init(int screenWidth, int screenHeight,
+						unsigned short canvasWidth, unsigned short canvasHeight) {
+	LastBindTexId = -1;
+	canvas_reset(canvasWidth, canvasHeight);
 
 	tex = (Texture *)res_newPngPOT("cat.png", IMG_QUALITY_LINEAR);
 	return;

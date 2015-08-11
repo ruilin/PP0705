@@ -42,6 +42,12 @@ PUBLIC Engine *engine_get() {
 	return &engine;
 }
 
+PUBLIC void engine_resetEnv(JNIEnv * env) {
+	engine.env = env;
+	jni_lib_init(engine.env);
+	return;
+}
+
 PUBLIC void engine_scaleScreenToGame(float sx, float sy, int *gx, int *gy) {
 	/* scales the screen (x,y) to game (x,y) */
 	*gx = engine_get()->gameWidth * (int)sx / engine_get()->screenWidth;

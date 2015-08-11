@@ -49,6 +49,7 @@ typedef struct {
 Engine *engine_init(JNIEnv * env);
 void engine_end();
 Engine *engine_get();
+void engine_resetEnv(JNIEnv * env);
 void engine_scaleScreenToGame(float sx, float sy, int *gx, int *gy);
 void engine_scaleGameToScreen(int gx, int gy, float *sx, float *sy);
 BOOL engine_setLoading(BOOL yes, float maxRatio);

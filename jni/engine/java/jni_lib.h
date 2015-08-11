@@ -49,5 +49,6 @@ BOOL jni_lib_textToBitmapPOT(const char *strToDraw, int fontsize,
 							int r, int g, int b, int a,
 							int strokeR, int strokeG, int strokeB, int strokeA);
 BOOL jni_lib_helper_getSysInfo(char **stringArray, int arrayCount, long long *longArray, int longArrayCount);
+void jni_lib_resetViewLayout(int x, int y, int w, int h);
 
 #endif /* HELLO_JNI_H_ */

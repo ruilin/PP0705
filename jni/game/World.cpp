@@ -8,14 +8,22 @@
 #include "World.h"
 
 Sprite *s;
+int x;
+int y;
 
 BOOL logic_init(Engine *engine) {
 	s = new Sprite(1000, NULL);
+	x = y = 0;
+//	jni_lib_resetViewLayout(x, y, engine->gameWidth, engine->gameHeight);
 	return TRUE;
 }
 
 BOOL logic_run(Engine *engine) {
-	s->updateFrame(engine->gametime, NULL);
+	if (s->updateFrame(engine->gametime, NULL)) {
+		x += 5;
+		y += 10;
+		jni_lib_resetViewLayout(x, y, engine->gameWidth, engine->gameHeight);
+	}
 	return TRUE;
 }
 BOOL logic_end(Engine *engine) {

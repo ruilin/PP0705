@@ -266,3 +266,10 @@ PUBLIC BOOL jni_lib_helper_getSysInfo(char **stringArray, int arrayCount, long l
 	(*env)->DeleteLocalRef(env, objArray);
 	return TRUE;
 }
+
+PUBLIC void jni_lib_resetViewLayout(int x, int y, int w, int h) {
+	/* call static method */
+	jmethodID mId = (*Jni_lib.env)->GetStaticMethodID(Jni_lib.env, Jni_lib.javaLibCls, "resetViewLayout", "(IIII)V");
+	(*Jni_lib.env)->CallStaticVoidMethod(Jni_lib.env, Jni_lib.javaLibCls, mId, x, y, w, h);
+	return;
+}

@@ -14,6 +14,11 @@ PUBLIC void renderer2d_init(Engine *engine) {
 	return;
 }
 
+PUBLIC void renderer2d_reset(Engine *engine, unsigned short screenWidth, unsigned short screenHeight, unsigned short gameWidth, unsigned short gameHeight) {
+	canvas_reset(gameWidth, gameHeight);
+	return;
+}
+
 PUBLIC void renderer2d_end(Engine *engine) {
 	canvas_end();
 	renderer_end(engine);
