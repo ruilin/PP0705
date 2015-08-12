@@ -11,7 +11,7 @@
 PUBLIC MapData *map_data_create(const char *filepath) {
 	unsigned int offset = 0;
 	unsigned int fileSize = 0;
-	unsigned char *mpd = (unsigned char *)jni_lib_readFromAssets(filepath, &fileSize);
+	unsigned char *mpd = (unsigned char *)jlib_readFromAssets(filepath, &fileSize);
 	MapData *map = MALLOC(sizeof(MapData));
 	map->width = endian_getBigEndian2Bytes(mpd, offset);
 	offset +=2;

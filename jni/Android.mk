@@ -90,6 +90,7 @@ LOCAL_SRC_FILES_ENGINE			:=	engine/base/jni_main.c							\
 LOCAL_CFLAGS    					:= -Werror
 LOCAL_SRC_FILES 					:= 	$(LOCAL_SRC_FILES_ENGINE)				\
 														gl_code.cpp											\
+														game/common/Javalib.cpp					\
 														game/World.cpp									\
 														game/Sprite.cpp									\
 

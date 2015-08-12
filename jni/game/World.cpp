@@ -7,22 +7,25 @@
 
 #include "World.h"
 
+#define PET_W		100
+#define PET_H		100
+
 Sprite *s;
 int x;
 int y;
 
 BOOL logic_init(Engine *engine) {
 	s = new Sprite(1000, NULL);
-	x = y = 0;
-//	jni_lib_resetViewLayout(x, y, engine->gameWidth, engine->gameHeight);
+	x = engine->screenWidth - PET_W;
+	y = engine->screenHeight - PET_H;
 	return TRUE;
 }
 
 BOOL logic_run(Engine *engine) {
 	if (s->updateFrame(engine->gametime, NULL)) {
-		x += 5;
-		y += 10;
-		jni_lib_resetViewLayout(x, y, engine->gameWidth, engine->gameHeight);
+		x -= 20;
+		y += 15;
+		Javalib::resetViewLayout(x, y, PET_W, PET_H);
 	}
 	return TRUE;
 }
@@ -42,7 +45,7 @@ void renderer_draw(Engine *engine, Graphic *g) {
 //	canvas_renderTest(g);
 //	canvas_clear(0.0f, 0.0f, 0.0f, 0.0f);
 	canvas_clear(0.5f, 0.5f, 0.5f, 1.0f);
-	s->drawFrame(g, 100, 100, 1.0f, 1.0f, 1.0f, 1.0f);
+	s->drawFrame(g, 0, 0, 1.0f, 1.0f, 1.0f, 1.0f);
 //	graphic_popMatrix(g);
 	return;
 }

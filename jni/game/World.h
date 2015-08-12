@@ -10,6 +10,7 @@
 
 
 #include <BaseCpp.h>
+#include<common/Javalib.h>
 #include "Sprite.h"
 
 #endif /* WORLD_H_ */

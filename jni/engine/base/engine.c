@@ -24,7 +24,7 @@ PUBLIC Engine *engine_init(JNIEnv * env) {
 	engine.loadingRatio = 0.0f;
 	engine.maxRatio = 0.0f;
 	engine.debug = debug_init();
-	jni_lib_init(engine.env);
+	jlib_init(engine.env);
 	engine.sysinfo = sysinfo_init();
 	file_op_init(engine.sysinfo->externalStorageDirectoryName);
 	database_init();
@@ -34,7 +34,7 @@ PUBLIC Engine *engine_init(JNIEnv * env) {
 
 PUBLIC void engine_end() {
 //	sysinfo_destroy(); engine->sysinfo = NULL;
-	jni_lib_end();
+	jlib_end();
 	return;
 }
 
@@ -44,7 +44,7 @@ PUBLIC Engine *engine_get() {
 
 PUBLIC void engine_resetEnv(JNIEnv * env) {
 	engine.env = env;
-	jni_lib_init(engine.env);
+	jlib_init(engine.env);
 	return;
 }
 

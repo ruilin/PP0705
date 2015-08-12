@@ -40,12 +40,12 @@ public class FloatWindowService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		globalData = new Platform();
 		GL2JNILib.create(globalData);
-		GameWindowManager.createPetView(getApplicationContext());
+		ViewMng.createPetView(getApplicationContext());
 		return super.onStartCommand(intent, flags, startId);
 	}
 
 	private void end() {
-		GameWindowManager.destroy(getApplicationContext());
+		ViewMng.destroy(getApplicationContext());
 		GL2JNILib.destroy(globalData);
 		globalData = null;
 	}
@@ -65,30 +65,30 @@ public class FloatWindowService extends Service {
 		@Override
 		public void run() {
 			// 当前界面是桌面，且没有悬浮窗显示，则创建悬浮窗。
-			if (isHome() && !GameWindowManager.isWindowShowing()) {
+			if (isHome() && !ViewMng.isWindowShowing()) {
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
-						GameWindowManager.createSmallWindow(getApplicationContext());
+						ViewMng.createSmallWindow(getApplicationContext());
 					}
 				});
 			}
 			// 当前界面不是桌面，且有悬浮窗显示，则移除悬浮窗。
-			else if (!isHome() && GameWindowManager.isWindowShowing()) {
+			else if (!isHome() && ViewMng.isWindowShowing()) {
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
-						GameWindowManager.removeSmallWindow(getApplicationContext());
-						GameWindowManager.removeBigWindow(getApplicationContext());
+						ViewMng.removeSmallWindow(getApplicationContext());
+						ViewMng.removeBigWindow(getApplicationContext());
 					}
 				});
 			}
 			// 当前界面是桌面，且有悬浮窗显示，则更新内存数据。
-			else if (isHome() && GameWindowManager.isWindowShowing()) {
+			else if (isHome() && ViewMng.isWindowShowing()) {
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
-						GameWindowManager.updateUsedPercent(getApplicationContext());
+						ViewMng.updateUsedPercent(getApplicationContext());
 					}
 				});
 			}

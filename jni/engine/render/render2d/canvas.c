@@ -200,8 +200,8 @@ PRIVATE BOOL canvas_setShader() {
     printGLString("Renderer", GL_RENDERER);
     printGLString("Extensions", GL_EXTENSIONS);
 
-    unsigned char *gVertexShader = jni_lib_readFromAssets("shader/tex2d.vsh", NULL);
-    unsigned char *gFragmentShader = jni_lib_readFromAssets("shader/tex2d.fsh", NULL);
+    unsigned char *gVertexShader = jlib_readFromAssets("shader/tex2d.vsh", NULL);
+    unsigned char *gFragmentShader = jlib_readFromAssets("shader/tex2d.fsh", NULL);
     gProgram = createProgram(gVertexShader, gFragmentShader);
     FREE(gVertexShader);
     FREE(gFragmentShader);

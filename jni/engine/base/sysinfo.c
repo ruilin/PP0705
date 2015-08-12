@@ -13,7 +13,7 @@ PUBLIC struct Sysinfo *sysinfo_init() {
 	char **stringArray; long long *longArray;
 	stringArray = (char **)MALLOC(sizeof(unsigned int) * 39);
 	longArray = (long long *)MALLOC(sizeof(long long) * 3);
-	jni_lib_helper_getSysInfo(stringArray, 39, longArray, 3);
+	jlib_getSysInfo(stringArray, 39, longArray, 3);
 
 	s.externalStorageDirectoryName = stringArray[0];
 	s.rootDirectory = stringArray[1];

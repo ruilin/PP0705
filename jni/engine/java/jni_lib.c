@@ -36,14 +36,18 @@ PRIVATE struct JniLib {
 	jclass langStringClass; jobject langStringClassRef;
 } Jni_lib;
 
-PUBLIC JNIEnv *jni_lib_getEnv() {
+PUBLIC JNIEnv *jlib_getEnv() {
 	return Jni_lib.env;
 }
 
-PRIVATE jobject _jni_lib_getJavaAssetManager(JNIEnv* env) {
+PUBLIC jclass jlib_getCls() {
+	return Jni_lib.javaLibCls;
+}
+
+PRIVATE jobject _jlib_getJavaAssetManager(JNIEnv* env) {
 	jclass cls = (*env)->FindClass(env, JAVA_HELPER_PATH);
 	if (NULL == cls) {
-		LOGE("_jni_lib_getJavaAssetManager() NULL == cls");
+		LOGE("_jlib_getJavaAssetManager() NULL == cls");
 		return NULL;
 	}
 	/* call static method */
@@ -51,7 +55,7 @@ PRIVATE jobject _jni_lib_getJavaAssetManager(JNIEnv* env) {
 	return (*env)->CallStaticObjectMethod(env, cls, mId);
 }
 
-PUBLIC void jni_lib_init_langStringClass() {
+PUBLIC void jlib_init_langStringClass() {
 	JNIEnv *env;
 	env = Jni_lib.env;
 	Jni_lib.langStringClass = (*env)->FindClass(env, "java/lang/String");
@@ -60,9 +64,9 @@ PUBLIC void jni_lib_init_langStringClass() {
 	return;
 }
 
-PUBLIC void jni_lib_init(JNIEnv* env) {
+PUBLIC void jlib_init(JNIEnv* env) {
 	Jni_lib.env = env;
-	jobject assetFormJava = _jni_lib_getJavaAssetManager(env);
+	jobject assetFormJava = _jlib_getJavaAssetManager(env);
 	Jni_lib.assetManager = AAssetManager_fromJava(Jni_lib.env, assetFormJava);
 	if(Jni_lib.assetManager == NULL) {
 	  LOGE("jni_lib_init() AAssetManager==NULL");
@@ -73,19 +77,19 @@ PUBLIC void jni_lib_init(JNIEnv* env) {
 		LOGE("jni_lib_init() NULL == javaLibCls");
 		return;
 	}
-	jni_lib_init_langStringClass();
+	jlib_init_langStringClass();
 	return;
 }
 
-PUBLIC void jni_lib_end() {
+PUBLIC void jlib_end() {
 
 	return;
 }
 
-PUBLIC AAsset *jni_lib_getAAsset(const char *filename, off_t *size) {
+PUBLIC AAsset *jlib_getAAsset(const char *filename, off_t *size) {
 	AAsset *asset = AAssetManager_open(Jni_lib.assetManager, filename, AASSET_MODE_UNKNOWN);
 	if(asset == NULL) {
-	  LOGE("jni_lib_getAAsset() asset == NULL, filename: %s", filename);
+	  LOGE("jlib_getAAsset() asset == NULL, filename: %s", filename);
 	  return NULL;
 	}
 	*size = AAsset_getLength(asset);
@@ -111,11 +115,11 @@ Java_com_example_hellojni_HelloJni_stringFromJNI( JNIEnv* env,
     return (*env)->NewStringUTF(env, "Hello from JNI !");
 }
 
-PUBLIC unsigned char *jni_lib_readFromAssets(const char *filename, unsigned int *bufferSize) {
+PUBLIC unsigned char *jlib_readFromAssets(const char *filename, unsigned int *bufferSize) {
 	/*获取文件名并打开*/
 	AAsset *asset = AAssetManager_open(Jni_lib.assetManager, filename, AASSET_MODE_UNKNOWN);
 	if(asset == NULL) {
-	  LOGE("jni_lib_readFromAssets() asset == NULL, filename: %s", filename);
+	  LOGE("jlib_readFromAssets() asset == NULL, filename: %s", filename);
 	  return NULL;
 	}
 	/*获取文件大小*/
@@ -132,12 +136,12 @@ PUBLIC unsigned char *jni_lib_readFromAssets(const char *filename, unsigned int 
 /*
  * 复制所有文件到SD卡（不包括子目录）
  */
-PUBLIC void jni_lib_cpy_allFileToSdcard(const char *path) {
+PUBLIC void jlib_cpy_allFileToSdcard(const char *path) {
 	/* TODO 暂时去掉判断，方便调试和更新 */
-//	if (FALSE == file_op_isExists(path)) {
+	if (FALSE == file_op_isExists(path)) {
 		AAssetDir *dir = AAssetManager_openDir(Jni_lib.assetManager, path);
 		if(dir == NULL) {
-			LOGE("jni_lib_iterator_allFile() asset == NULL, filename: %s", path);
+			LOGE("jlib_cpy_allFileToSdcard() asset == NULL, filename: %s", path);
 			return;
 		}
 		file_op_mkdir(path);
@@ -146,12 +150,12 @@ PUBLIC void jni_lib_cpy_allFileToSdcard(const char *path) {
 		while (NULL != (filename = AAssetDir_getNextFileName(dir))) {
 			int size;
 			sprintf(filepath, "%s/%s", path, filename);
-			unsigned char *filecontent = jni_lib_readFromAssets(filepath, &size);
+			unsigned char *filecontent = jlib_readFromAssets(filepath, &size);
 			file_op_writeFile(filepath, filecontent, size);
 			FREE(filecontent);
 		}
 		AAssetDir_close(dir);
-//	}
+	}
 	return;
 }
 
@@ -159,9 +163,9 @@ PUBLIC void jni_lib_cpy_allFileToSdcard(const char *path) {
  * 读取文件数据传递给java转换为bitmap再传回来
  * （比较耗时）
  */
-PUBLIC unsigned char *jni_lib_readPngFromAssets(const char *filename, jobject *bitmap) {
+PUBLIC unsigned char *jlib_readPngFromAssets(const char *filename, jobject *bitmap) {
 	unsigned int bufferSize;
-	unsigned char *buffer = jni_lib_readFromAssets(filename, &bufferSize);
+	unsigned char *buffer = jlib_readFromAssets(filename, &bufferSize);
 	jmethodID mId = (*Jni_lib.env)->GetStaticMethodID(Jni_lib.env, Jni_lib.javaLibCls, "convertToBMP", "([B)Landroid/graphics/Bitmap;");
 
 	jbyteArray jbyteArr = (*Jni_lib.env)->NewByteArray(Jni_lib.env, bufferSize);
@@ -176,7 +180,7 @@ PUBLIC unsigned char *jni_lib_readPngFromAssets(const char *filename, jobject *b
 /*
  * 获取由java读取的bitmap
  */
-PUBLIC BOOL jni_lib_loadJavaAssetBitmap(const char *filename, jobject *bitmap) {
+PUBLIC BOOL jlib_loadJavaAssetBitmap(const char *filename, jobject *bitmap) {
 	/* call static method */
 	jstring str = (*Jni_lib.env)->NewStringUTF(Jni_lib.env, filename);
 	jmethodID mId = (*Jni_lib.env)->GetStaticMethodID(Jni_lib.env, Jni_lib.javaLibCls, "getAssetBitmap", "(Ljava/lang/String;)Landroid/graphics/Bitmap;");
@@ -188,7 +192,7 @@ PUBLIC BOOL jni_lib_loadJavaAssetBitmap(const char *filename, jobject *bitmap) {
 /****************************************************************************************************************************/
 /* text bitmap */
 
-PUBLIC BOOL jni_lib_textToBitmapPOT(const char *strToDraw, int fontsize,
+PUBLIC BOOL jlib_textToBitmapPOT(const char *strToDraw, int fontsize,
 									int strokeWidth, int paintStyle,
 									jobject *bitmapObject,
 									int *bitmapWidth, int *bitmapHeight,
@@ -201,12 +205,12 @@ PUBLIC BOOL jni_lib_textToBitmapPOT(const char *strToDraw, int fontsize,
 	env = Jni_lib.env;
 	cls = Jni_lib.javaLibCls;
 	if (NULL == cls) {
-		LOGE("jni_lib_textToBitmapPOT() NULL == cls");
+		LOGE("jlib_textToBitmapPOT() NULL == cls");
 		return FALSE;
 	}
 	m = (*env)->GetStaticMethodID(env, cls, "textToBitmapPOT", "(Ljava/lang/String;[IIIIIIIIIIII)Landroid/graphics/Bitmap;");
 	if (NULL == m) {
-		LOGE("jni_lib_textToBitmapPOT(): GetStaticMethodID() failed");
+		LOGE("jlib_textToBitmapPOT(): GetStaticMethodID() failed");
 		return FALSE;
 	}
 	jstr = (*env)->NewStringUTF(env, strToDraw);
@@ -224,22 +228,22 @@ PUBLIC BOOL jni_lib_textToBitmapPOT(const char *strToDraw, int fontsize,
 	return TRUE;
 }
 
-PUBLIC void jni_lib_bitmapToPixels(jobject bitmap, unsigned char **pixels) {
+PUBLIC void jlib_bitmapToPixels(jobject bitmap, unsigned char **pixels) {
 	int ret;
 	if ((ret = AndroidBitmap_lockPixels(Jni_lib.env, bitmap, (void **)(pixels))) < 0) {
-		LOGE("jni_lib_bitmapToPixels() error: %d", ret);
+		LOGE("jlib_bitmapToPixels() error: %d", ret);
 	}
 	AndroidBitmap_unlockPixels(Jni_lib.env, bitmap);
 	return;
 }
 
-PUBLIC BOOL jni_lib_helper_getSysInfo(char **stringArray, int arrayCount, long long *longArray, int longArrayCount) {
+PUBLIC BOOL jlib_getSysInfo(char **stringArray, int arrayCount, long long *longArray, int longArrayCount) {
 	struct _jlib *j; JNIEnv *env; jclass c; jmethodID m; jstring jstr; jobjectArray objArray; int i; jlongArray javaLongArray; jlong *javaLong;
 	env = Jni_lib.env;
 	c = Jni_lib.javaLibCls;
 	m = (*env)->GetStaticMethodID(env, c, "getSysInfo", "([Ljava/lang/String;[J)V");
 	if (NULL == m) {
-		LOGE("jni_lib_helper_getSysInfo(): GetStaticMethodID() failed");
+		LOGE("jlib_getSysInfo(): GetStaticMethodID() failed");
 		return FALSE;
 	}
 	objArray = (*env)->NewObjectArray(env, arrayCount, Jni_lib.langStringClass, NULL);
@@ -267,9 +271,3 @@ PUBLIC BOOL jni_lib_helper_getSysInfo(char **stringArray, int arrayCount, long l
 	return TRUE;
 }
 
-PUBLIC void jni_lib_resetViewLayout(int x, int y, int w, int h) {
-	/* call static method */
-	jmethodID mId = (*Jni_lib.env)->GetStaticMethodID(Jni_lib.env, Jni_lib.javaLibCls, "resetViewLayout", "(IIII)V");
-	(*Jni_lib.env)->CallStaticVoidMethod(Jni_lib.env, Jni_lib.javaLibCls, mId, x, y, w, h);
-	return;
-}

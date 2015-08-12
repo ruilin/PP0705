@@ -21,7 +21,7 @@ import android.os.Message;
 import android.util.Log;
 
 import com.ryangame.pet.AppContext;
-import com.ryangame.pet.GameWindowManager;
+import com.ryangame.pet.ViewMng;
 
 public class Helper {
 	private static Canvas mCanvas = null;
@@ -213,12 +213,12 @@ public class Helper {
 	}
 	
 	public static void resetViewLayout(int x, int y, int w, int h) {
-		Handler myHandler = new Handler(AppContext.getInstance().getMainLooper()) {  
+		Handler myHandler = new Handler(AppContext.getInstance().getMainLooper()) {
 			public void handleMessage(Message msg) {
 				super.handleMessage(msg);
 				int param[] = (int[])msg.obj;
-				if (null != GameWindowManager.petView)
-					GameWindowManager.petView.resetLayout(param[0], param[1], param[2], param[3]);
+				if (null != ViewMng.petView)
+					ViewMng.petView.resetLayout(param[0], param[1], param[2], param[3]);
 			}
 		};
 		Message msg = Message.obtain(myHandler, 0, new int[]{x, y, w, h});

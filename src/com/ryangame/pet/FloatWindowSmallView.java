@@ -75,7 +75,7 @@ public class FloatWindowSmallView extends LinearLayout {
 		viewWidth = view.getLayoutParams().width;
 		viewHeight = view.getLayoutParams().height;
 		TextView percentView = (TextView) findViewById(R.id.percent);
-		percentView.setText(GameWindowManager.getUsedPercentValue(context));
+		percentView.setText(ViewMng.getUsedPercentValue(context));
 	}
 
 	@Override
@@ -131,8 +131,8 @@ public class FloatWindowSmallView extends LinearLayout {
 	 * 打开大悬浮窗，同时关闭小悬浮窗。
 	 */
 	private void openBigWindow() {
-		GameWindowManager.createBigWindow(getContext());
-		GameWindowManager.removeSmallWindow(getContext());
+		ViewMng.createBigWindow(getContext());
+		ViewMng.removeSmallWindow(getContext());
 	}
 
 	/**

@@ -11,7 +11,7 @@
 PUBLIC SpriteData *sprite_data_create(const char *filepath, unsigned short imgWidthPOT, unsigned short imgHeightPOT) {
 	unsigned int offset = 4;
 	unsigned int fileSize = 0;
-	unsigned char *file = (unsigned char *)jni_lib_readFromAssets(filepath, &fileSize);
+	unsigned char *file = (unsigned char *)jlib_readFromAssets(filepath, &fileSize);
 
 	SpriteData *data = MALLOC(sizeof(SpriteData));
 	data->version = file[offset];

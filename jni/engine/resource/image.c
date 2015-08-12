@@ -43,7 +43,7 @@ PUBLIC unsigned char *image_readPng(const char* filePath) {
     float w, h;
     AAsset* asset   = NULL;
 	off_t size;
-	asset = jni_lib_getAAsset(filePath, &size);
+	asset = jlib_getAAsset(filePath, &size);
     do {
         unsigned char head[8];
         AAsset_read(asset, head, 8);
@@ -222,7 +222,7 @@ PUBLIC Texture *image_createPngPOT(const char *filePath, IMG_QUALITY quality) {
 	_image_init(tex, IMG_TYPE_RES);
 	tex->quality = quality;
 	strcpy(tex->filePath, filePath);
-	unsigned char *file = jni_lib_readFromAssets(filePath, &(tex->size));
+	unsigned char *file = jlib_readFromAssets(filePath, &(tex->size));
 	resData = png_reader_parser(file, &(tex->width), &(tex->height), NULL, NULL);
 	FREE(file);
 	if (FALSE == _image_checkPOT(tex->width, tex->height)) {
@@ -244,11 +244,11 @@ PUBLIC Texture *image_crateTextPngPOT(const char *text, int fontsize, int stroke
 	Texture *tex = (Texture *)MALLOC(sizeof(Texture));
 	_image_init(tex, IMG_TYPE_TEXT);
 	jobject bitmap;
-	if (TRUE == jni_lib_textToBitmapPOT(text, fontsize, strokeWidth, paintStyle, &bitmap,
+	if (TRUE == jlib_textToBitmapPOT(text, fontsize, strokeWidth, paintStyle, &bitmap,
 										&(tex->width), &(tex->height),
 										&(tex->widthPOT), &(tex->heightPOT),
 										textPixelSize, r, g, b, a, strokeR, strokeG, strokeB, strokeA)) {
-		jni_lib_bitmapToPixels(bitmap, &tex->pixels);
+		jlib_bitmapToPixels(bitmap, &tex->pixels);
 	}
 	return tex;
 }

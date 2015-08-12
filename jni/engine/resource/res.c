@@ -42,19 +42,19 @@ PUBLIC void res_releasePng(Texture *img) {
 PRIVATE void *_res_cpyScript(void *data) {
 	const char *path = (const char *)data;
 
-	jni_lib_cpy_allFileToSdcard("script");
+	jlib_cpy_allFileToSdcard("script");
 	engine_setLoadingRatio(0.2);
-	jni_lib_cpy_allFileToSdcard("script/ini");
+	jlib_cpy_allFileToSdcard("script/ini");
 	engine_setLoadingRatio(0.2);
-	jni_lib_cpy_allFileToSdcard("script/map");
+	jlib_cpy_allFileToSdcard("script/map");
 	engine_setLoadingRatio(0.2);
-	jni_lib_cpy_allFileToSdcard("script/act");
+	jlib_cpy_allFileToSdcard("script/act");
 	engine_setLoadingRatio(0.2);
-	jni_lib_cpy_allFileToSdcard("script/eff");
+	jlib_cpy_allFileToSdcard("script/eff");
 	engine_setLoadingRatio(0.1);
-	jni_lib_cpy_allFileToSdcard("script/pro");
+	jlib_cpy_allFileToSdcard("script/pro");
 	engine_setLoadingRatio(0.1);
-	jni_lib_cpy_allFileToSdcard("script/story");
+	jlib_cpy_allFileToSdcard("script/story");
 	/* 拷贝完成，切换状态进入游戏 */
 	engine_setLoading(FALSE, 1.0);
 	return NULL;

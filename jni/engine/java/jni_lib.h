@@ -31,16 +31,17 @@
 	Arrays数组 	[array-type [数组类型
 	methods方法 	(argument-types)return-type(参数)返回类型
  */
-JNIEnv *jni_lib_getEnv();
-void jni_lib_init(JNIEnv* env);
-void jni_lib_end();
-AAsset *jni_lib_getAAsset(const char *filename, off_t *size);
-void jni_lib_cpy_allFileToSdcard(const char *path);
-unsigned char *jni_lib_readFromAssets(const char *filename, unsigned int *bufferSize);
-unsigned char *jni_lib_readPngFromAssets(const char *filename, jobject *bitmap);
-BOOL jni_lib_loadJavaAssetBitmap(const char *filename, jobject *bitmap);
-void jni_lib_bitmapToPixels(jobject bitmap, unsigned char **pixels);
-BOOL jni_lib_textToBitmapPOT(const char *strToDraw, int fontsize,
+JNIEnv *jlib_getEnv();
+jclass jlib_getCls();
+void jlib_init(JNIEnv* env);
+void jlib_end();
+AAsset *jlib_getAAsset(const char *filename, off_t *size);
+void jlib_cpy_allFileToSdcard(const char *path);
+unsigned char *jlib_readFromAssets(const char *filename, unsigned int *bufferSize);
+unsigned char *jlib_readPngFromAssets(const char *filename, jobject *bitmap);
+BOOL jlib_loadJavaAssetBitmap(const char *filename, jobject *bitmap);
+void jlib_bitmapToPixels(jobject bitmap, unsigned char **pixels);
+BOOL jlib_textToBitmapPOT(const char *strToDraw, int fontsize,
 							int strokeWidth, int paintStyle,
 							jobject *bitmapObject,
 							int *bitmapWidth, int *bitmapHeight,
@@ -48,7 +49,6 @@ BOOL jni_lib_textToBitmapPOT(const char *strToDraw, int fontsize,
 							int *textPixelSize,
 							int r, int g, int b, int a,
 							int strokeR, int strokeG, int strokeB, int strokeA);
-BOOL jni_lib_helper_getSysInfo(char **stringArray, int arrayCount, long long *longArray, int longArrayCount);
-void jni_lib_resetViewLayout(int x, int y, int w, int h);
+BOOL jlib_getSysInfo(char **stringArray, int arrayCount, long long *longArray, int longArrayCount);
 
 #endif /* HELLO_JNI_H_ */

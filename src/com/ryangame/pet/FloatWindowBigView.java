@@ -31,8 +31,8 @@ public class FloatWindowBigView extends LinearLayout {
 			@Override
 			public void onClick(View v) {
 				// 点击关闭悬浮窗的时候，移除所有悬浮窗，并停止Service
-				GameWindowManager.removeBigWindow(context);
-				GameWindowManager.removeSmallWindow(context);
+				ViewMng.removeBigWindow(context);
+				ViewMng.removeSmallWindow(context);
 				Intent intent = new Intent(getContext(), FloatWindowService.class);
 				context.stopService(intent);
 			}
@@ -41,8 +41,8 @@ public class FloatWindowBigView extends LinearLayout {
 			@Override
 			public void onClick(View v) {
 				// 点击返回的时候，移除大悬浮窗，创建小悬浮窗
-				GameWindowManager.removeBigWindow(context);
-				GameWindowManager.createSmallWindow(context);
+				ViewMng.removeBigWindow(context);
+				ViewMng.createSmallWindow(context);
 			}
 		});
 	}

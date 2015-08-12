@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.ryangame.pet.gl.PetView;
 
-public class GameWindowManager {
+public class ViewMng {
 
 	/**
 	 * 小悬浮窗View的实例
