@@ -333,17 +333,29 @@ PRIVATE BOOL canvas_drawMatrix(Graphic *g, unsigned int x, unsigned int y, unsig
     float POSX, POSY;
     POSX = x;
     POSY = y;
+//    Vertex texVerData[4] =
+//    {
+//    	{{POSX,					POSY},					{g->vColor[0][0],g->vColor[0][1],g->vColor[0][2],g->vColor[0][3]},	{ratioSX,	ratioSY}},			/* LeftTop */
+//    	{{POSX + POTW,	POSY},					{g->vColor[1][0],g->vColor[1][1],g->vColor[1][2],g->vColor[1][3]},	{ratioEX,	ratioSY}},			/* RightTop */
+//    	{{POSX,					POSY + POTH},	{g->vColor[2][0],g->vColor[2][1],g->vColor[2][2],g->vColor[2][3]},	{ratioSX,	ratioEY}},			/* LeftBottom */
+//    	{{POSX + POTW,	POSY + POTH},	{g->vColor[3][0],g->vColor[3][1],g->vColor[3][2],g->vColor[3][3]},	{ratioEX,	ratioEY}},			/* RightBottom */
+//    };
+//    int i;
+//    for (i = 0; i < 4; i++) {
+//    	texVerData[i].Position[0] = texVerData[i].Position[0] * 2 / engine_get()->gameWidth - 1.0f;
+//    	texVerData[i].Position[1] = texVerData[i].Position[1] * -2 / engine_get()->gameHeight + 1.0f;
+//    }
     Vertex texVerData[4] =
     {
-    	{{POSX,					POSY},					{g->vColor[0][0],g->vColor[0][1],g->vColor[0][2],g->vColor[0][3]},	{ratioSX,	ratioSY}},			/* LeftTop */
-    	{{POSX + POTW,	POSY},					{g->vColor[1][0],g->vColor[1][1],g->vColor[1][2],g->vColor[1][3]},	{ratioEX,	ratioSY}},			/* RightTop */
-    	{{POSX,					POSY + POTH},	{g->vColor[2][0],g->vColor[2][1],g->vColor[2][2],g->vColor[2][3]},	{ratioSX,	ratioEY}},			/* LeftBottom */
-    	{{POSX + POTW,	POSY + POTH},	{g->vColor[3][0],g->vColor[3][1],g->vColor[3][2],g->vColor[3][3]},	{ratioEX,	ratioEY}},			/* RightBottom */
+    	{{POSX,					POSY},					{g->vColor[0][0],g->vColor[0][1],g->vColor[0][2],g->vColor[0][3]},	{ratioSX,	ratioEY}},			/* LeftTop */
+    	{{POSX + POTW,	POSY},					{g->vColor[1][0],g->vColor[1][1],g->vColor[1][2],g->vColor[1][3]},	{ratioEX,	ratioEY}},			/* RightTop */
+    	{{POSX,					POSY + POTH},	{g->vColor[2][0],g->vColor[2][1],g->vColor[2][2],g->vColor[2][3]},	{ratioSX,	ratioSY}},			/* LeftBottom */
+    	{{POSX + POTW,	POSY + POTH},	{g->vColor[3][0],g->vColor[3][1],g->vColor[3][2],g->vColor[3][3]},	{ratioEX,	ratioSY}},			/* RightBottom */
     };
     int i;
     for (i = 0; i < 4; i++) {
     	texVerData[i].Position[0] = texVerData[i].Position[0] * 2 / engine_get()->gameWidth - 1.0f;
-    	texVerData[i].Position[1] = texVerData[i].Position[1] * -2 / engine_get()->gameHeight + 1.0f;
+    	texVerData[i].Position[1] = texVerData[i].Position[1] * 2 / engine_get()->gameHeight - 1.0f;
     }
     GLuint vbo[1];
     glGenBuffers(1, vbo);

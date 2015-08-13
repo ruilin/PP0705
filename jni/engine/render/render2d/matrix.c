@@ -172,5 +172,74 @@ PUBLIC void matrixFrustumM(float *m, float left, float right, float bottom, floa
         m[11] = -1.0f;
 }
 
+/**
+ * Computes an orthographic projection matrix.
+ *
+ * @param m returns the result
+ * @param mOffset
+ * @param left
+ * @param right
+ * @param bottom
+ * @param top
+ * @param near
+ * @param far
+ */
+void matrixOrthoM(float m[], int mOffset,
+								float left, float right, float bottom, float top,
+								float near, float far) {
+	if (left == right) {
+//		throw new IllegalArgumentException("left == right");
+	}
+	if (bottom == top) {
+//		throw new IllegalArgumentException("bottom == top");
+	}
+	if (near == far) {
+//		throw new IllegalArgumentException("near == far");
+	}
 
+	const float r_width  = 1.0f / (right - left);
+	const float r_height = 1.0f / (top - bottom);
+	const float r_depth  = 1.0f / (far - near);
+	const float x =  2.0f * (r_width);
+	const float y =  2.0f * (r_height);
+	const float z = -2.0f * (r_depth);
+	const float tx = -(right + left) * r_width;
+	const float ty = -(top + bottom) * r_height;
+	const float tz = -(far + near) * r_depth;
+	m[mOffset + 0] = x;
+	m[mOffset + 5] = y;
+	m[mOffset +10] = z;
+	m[mOffset +12] = tx;
+	m[mOffset +13] = ty;
+	m[mOffset +14] = tz;
+	m[mOffset +15] = 1.0f;
+	m[mOffset + 1] = 0.0f;
+	m[mOffset + 2] = 0.0f;
+	m[mOffset + 3] = 0.0f;
+	m[mOffset + 4] = 0.0f;
+	m[mOffset + 6] = 0.0f;
+	m[mOffset + 7] = 0.0f;
+	m[mOffset + 8] = 0.0f;
+	m[mOffset + 9] = 0.0f;
+	m[mOffset + 11] = 0.0f;
+}
 
+/**
+ * Transposes a 4 x 4 matrix.
+ *
+ * @param mTrans the array that holds the output inverted matrix
+ * @param mTransOffset an offset into mInv where the inverted matrix is
+ *        stored.
+ * @param m the input array
+ * @param mOffset an offset into m where the matrix is stored.
+ */
+void matrixTransposeM(float mTrans[], int mTransOffset, float m[], int mOffset) {
+	int i;
+	for (i = 0; i < 4; i++) {
+		int mBase = i * 4 + mOffset;
+		mTrans[i + mTransOffset] = m[mBase];
+		mTrans[i + 4 + mTransOffset] = m[mBase + 1];
+		mTrans[i + 8 + mTransOffset] = m[mBase + 2];
+		mTrans[i + 12 + mTransOffset] = m[mBase + 3];
+	}
+}

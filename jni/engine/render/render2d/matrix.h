@@ -18,5 +18,9 @@ void matrixLookAtM(float *m,
                 float cenX, float cenY, float cenZ,
                 float  upX, float  upY, float  upZ);
 void matrixFrustumM(float *m, float left, float right, float bottom, float top, float near, float far);
+void matrixOrthoM(float m[], int mOffset,
+									float left, float right, float bottom, float top,
+									float near, float far);
+void matrixTransposeM(float mTrans[], int mTransOffset, float m[], int mOffset);
 
 #endif /* MATRIX_H_ */

@@ -7,8 +7,8 @@
 
 #include "World.h"
 
-#define PET_W		100
-#define PET_H		100
+#define PET_W		400
+#define PET_H		400
 
 Sprite *s;
 int x;
@@ -23,9 +23,9 @@ BOOL logic_init(Engine *engine) {
 
 BOOL logic_run(Engine *engine) {
 	if (s->updateFrame(engine->gametime, NULL)) {
-		x -= 20;
-		y += 15;
-		Javalib::resetViewLayout(x, y, PET_W, PET_H);
+//		x -= 20;
+//		y += 15;
+//		Javalib::resetViewLayout(x, y, PET_W, PET_H);
 	}
 	return TRUE;
 }
@@ -41,6 +41,8 @@ void renderer_end(Engine *engine) {
 }
 void renderer_draw(Engine *engine, Graphic *g) {
 //	graphic_pushMatrix(g);
+//	matrixOrthoM(g->matrix, 0, 0, 200, 0, 200, -1.0, 1.0);
+//	matrixTranslateM(g->matrix, 1.0, 0, 0);
 //	matrixScaleM(g->matrix, 2.0, 2.0, 1.0);
 //	canvas_renderTest(g);
 //	canvas_clear(0.0f, 0.0f, 0.0f, 0.0f);
