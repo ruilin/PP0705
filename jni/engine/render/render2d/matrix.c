@@ -109,6 +109,14 @@ PUBLIC void matrixTranslateM(float *m, float x, float y, float z) {
         }
 }
 
+PUBLIC void matrixTranslateM2(float m[], int mOffset, float x, float y, float z) {
+	int i;
+	for (i=0 ; i<4 ; i++) {
+		int mi = mOffset + i;
+		m[12 + mi] += m[mi] * x + m[4 + mi] * y + m[8 + mi] * z;
+	}
+}
+
 PUBLIC void matrixRotateM(float *m, float a, float x, float y, float z) {
         float rot[16], res[16];
         matrixSetRotateM(rot, a, x, y, z);
@@ -189,12 +197,15 @@ void matrixOrthoM(float m[], int mOffset,
 								float near, float far) {
 	if (left == right) {
 //		throw new IllegalArgumentException("left == right");
+		return;
 	}
 	if (bottom == top) {
 //		throw new IllegalArgumentException("bottom == top");
+		return;
 	}
 	if (near == far) {
 //		throw new IllegalArgumentException("near == far");
+		return;
 	}
 
 	const float r_width  = 1.0f / (right - left);

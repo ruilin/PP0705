@@ -22,5 +22,6 @@ void matrixOrthoM(float m[], int mOffset,
 									float left, float right, float bottom, float top,
 									float near, float far);
 void matrixTransposeM(float mTrans[], int mTransOffset, float m[], int mOffset);
+void matrixTranslateM2(float m[], int mOffset, float x, float y, float z);
 
 #endif /* MATRIX_H_ */
