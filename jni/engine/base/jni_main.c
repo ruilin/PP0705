@@ -112,6 +112,7 @@ JNIEXPORT JNICALL BOOL Java_com_ryangame_pet_gl_GL2JNILib_init(JNIEnv * env, job
 }
 
 JNIEXPORT JNICALL jobject Java_com_ryangame_pet_gl_GL2JNILib_step(JNIEnv * env, jobject obj, jobject platformObj) {
+	if (NULL == env) return platformObj;
 	if (NULL == engine) return platformObj;
 	engine->gametime = time_util_now_ms();
 	_updateToNativeC(env, platformObj);

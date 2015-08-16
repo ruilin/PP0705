@@ -122,14 +122,17 @@ bool Sprite::updateFrame(unsigned long long gametime,
 void Sprite::drawTile(Texture *tex, Graphic *g,
 						short drawX, short drawY,
 						const SpriteData_Tile *tile, SPRITE_TRANS trans) {
+	int w = tex->widthPOT * (tile->exRatio - tile->sxRatio);
+	int h = tex->heightPOT * (tile->eyRatio - tile->syRatio);
 	switch (trans) {
 		case TRANS_MIRROR:
 			graphic_pushMatrix(g);
 			graphic_rotate(g, 180, 0, 1, 0);
-			canvas_drawBitmapClipRatio(tex, g, engine_get()->gameWidth - drawX - (tex->width * (tile->exRatio - tile->sxRatio)), drawY, tile->sxRatio, tile->syRatio, tile->exRatio, tile->eyRatio);
+			canvas_drawBitmapClipScale(tex, g, engine_get()->gameWidth - drawX - w, drawY,
+														w, h, tile->sxRatio, tile->syRatio, tile->exRatio, tile->eyRatio);
 			graphic_popMatrix(g);
 		default:
-			canvas_drawBitmapClipRatio(tex, g, drawX, drawY, tile->sxRatio, tile->syRatio, tile->exRatio, tile->eyRatio);
+			canvas_drawBitmapClipScale(tex, g, drawX, drawY, w, h, tile->sxRatio, tile->syRatio, tile->exRatio, tile->eyRatio);
 			break;
 	}
 	return;

@@ -41,7 +41,8 @@ void canvas_init(int screenWidth, int screenHeight,
 void canvas_end();
 void canvas_reset(unsigned short canvasWidth, unsigned short canvasHeight);
 void canvas_drawBitmap(Texture *tex, Graphic *g, int x, int y);
-void canvas_drawBitmapClipRatio(Texture *tex, Graphic *g, int x, int y, float ratioSX, float ratioSY, float ratioEX, float ratioEY);
+void canvas_drawBitmapClipScale(Texture *tex, Graphic *g, int x, int y, int w, int h,
+															float ratioSX, float ratioSY, float ratioEX, float ratioEY);
 void canvas_renderTest(Graphic *g);
 
 #endif /* CANVAS_H_ */

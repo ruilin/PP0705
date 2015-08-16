@@ -314,7 +314,9 @@ PUBLIC void canvas_end() {
 	res_releasePng(tex);
 }
 
-PRIVATE BOOL canvas_drawMatrix(Graphic *g, unsigned int x, unsigned int y, unsigned int POTW, unsigned int POTH, float ratioSX, float ratioSY, float ratioEX, float ratioEY) {
+#define ROTATE_COORD 1
+
+PRIVATE BOOL canvas_drawMatrix(Graphic *g, int x, int y, int POTW, int POTH, float ratioSX, float ratioSY, float ratioEX, float ratioEY) {
     /*-- VBO --*/
     /*
     GLuint vbo[2];
@@ -333,18 +335,20 @@ PRIVATE BOOL canvas_drawMatrix(Graphic *g, unsigned int x, unsigned int y, unsig
     float POSX, POSY;
     POSX = x;
     POSY = y;
-//    Vertex texVerData[4] =
-//    {
-//    	{{POSX,					POSY},					{g->vColor[0][0],g->vColor[0][1],g->vColor[0][2],g->vColor[0][3]},	{ratioSX,	ratioSY}},			/* LeftTop */
-//    	{{POSX + POTW,	POSY},					{g->vColor[1][0],g->vColor[1][1],g->vColor[1][2],g->vColor[1][3]},	{ratioEX,	ratioSY}},			/* RightTop */
-//    	{{POSX,					POSY + POTH},	{g->vColor[2][0],g->vColor[2][1],g->vColor[2][2],g->vColor[2][3]},	{ratioSX,	ratioEY}},			/* LeftBottom */
-//    	{{POSX + POTW,	POSY + POTH},	{g->vColor[3][0],g->vColor[3][1],g->vColor[3][2],g->vColor[3][3]},	{ratioEX,	ratioEY}},			/* RightBottom */
-//    };
-//    int i;
-//    for (i = 0; i < 4; i++) {
-//    	texVerData[i].Position[0] = texVerData[i].Position[0] * 2 / engine_get()->gameWidth - 1.0f;
-//    	texVerData[i].Position[1] = texVerData[i].Position[1] * -2 / engine_get()->gameHeight + 1.0f;
-//    }
+#if ROTATE_COORD
+    Vertex texVerData[4] =
+    {
+    	{{POSX,					POSY},					{g->vColor[0][0],g->vColor[0][1],g->vColor[0][2],g->vColor[0][3]},	{ratioSX,	ratioSY}},			/* LeftTop */
+    	{{POSX + POTW,	POSY},					{g->vColor[1][0],g->vColor[1][1],g->vColor[1][2],g->vColor[1][3]},	{ratioEX,	ratioSY}},			/* RightTop */
+    	{{POSX,					POSY + POTH},	{g->vColor[2][0],g->vColor[2][1],g->vColor[2][2],g->vColor[2][3]},	{ratioSX,	ratioEY}},			/* LeftBottom */
+    	{{POSX + POTW,	POSY + POTH},	{g->vColor[3][0],g->vColor[3][1],g->vColor[3][2],g->vColor[3][3]},	{ratioEX,	ratioEY}},			/* RightBottom */
+    };
+    int i;
+    for (i = 0; i < 4; i++) {
+    	texVerData[i].Position[0] = texVerData[i].Position[0] * 2 / engine_get()->gameWidth - 1.0f;
+    	texVerData[i].Position[1] = texVerData[i].Position[1] * -2 / engine_get()->gameHeight + 1.0f;
+    }
+#else
     Vertex texVerData[4] =
     {
     	{{POSX,					POSY},					{g->vColor[0][0],g->vColor[0][1],g->vColor[0][2],g->vColor[0][3]},	{ratioSX,	ratioEY}},			/* LeftTop */
@@ -357,6 +361,7 @@ PRIVATE BOOL canvas_drawMatrix(Graphic *g, unsigned int x, unsigned int y, unsig
     	texVerData[i].Position[0] = texVerData[i].Position[0] * 2 / engine_get()->gameWidth - 1.0f;
     	texVerData[i].Position[1] = texVerData[i].Position[1] * 2 / engine_get()->gameHeight - 1.0f;
     }
+#endif
     GLuint vbo[1];
     glGenBuffers(1, vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
@@ -397,11 +402,11 @@ PUBLIC void canvas_drawBitmap(Texture *tex, Graphic *g, int x, int y) {
     return;
 }
 
-/* 裁剪图片 */
-PUBLIC void canvas_drawBitmapClipRatio(Texture *tex, Graphic *g, int x, int y, float ratioSX, float ratioSY, float ratioEX, float ratioEY) {
+/* 裁剪-缩放图片 */
+PUBLIC void canvas_drawBitmapClipScale(Texture *tex, Graphic *g, int x, int y, int w, int h, float ratioSX, float ratioSY, float ratioEX, float ratioEY) {
     GL_ENABLE_TEXTURE();
     canvas_bindTexture(g, tex);
-    canvas_drawMatrix(g, x, y, tex->widthPOT * (ratioEX - ratioSX), tex->heightPOT * (ratioEY - ratioSY), ratioSX, ratioSY, ratioEX, ratioEY);
+    canvas_drawMatrix(g, x, y, w, h, ratioSX, ratioSY, ratioEX, ratioEY);
     return;
 }
 
@@ -410,7 +415,6 @@ PUBLIC void canvas_renderTest(Graphic *g) {
 	canvas_clear(0.5f, 0.5f, 0.5f, 1.0f);
     /*glDrawArrays(GL_TRIANGLES, 0, 6);*/
 	canvas_drawBitmap(tex, g, 100, 100);
-	canvas_drawBitmapClipRatio(tex, g, 1, 1, 0.0, 0.2, 1.0, 0.8);
 }
 
 
