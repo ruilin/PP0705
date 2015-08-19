@@ -7,15 +7,15 @@
 
 #include "World.h"
 
-#define PET_W		400
-#define PET_H		400
+#define PET_W		200
+#define PET_H		200
 
 Sprite *s;
 int x;
 int y;
 
 BOOL logic_init(Engine *engine) {
-	s = new Sprite(1000, NULL);
+	s = new Sprite(10010, NULL);
 	x = engine->screenWidth - PET_W;
 	y = engine->screenHeight - PET_H;
 	return TRUE;
@@ -34,6 +34,7 @@ BOOL logic_end(Engine *engine) {
 	return TRUE;
 }
 void renderer_init(Engine *engine) {
+	Javalib::resetViewLayout(200, 200, PET_W, PET_H);
 	return;
 }
 void renderer_end(Engine *engine) {

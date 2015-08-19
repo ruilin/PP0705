@@ -115,7 +115,7 @@ PUBLIC SpriteData *sprite_data_create(const char *filepath, unsigned short imgWi
 			for (j = 0; j < data->array_action[i].frameCount; j++) {
 				data->array_action[i].array_actionFrame[j].frameIndex = endian_getBigEndian2Bytes(file, offset);
 				offset += 2;
-				data->array_action[i].array_actionFrame[j].delayTime = 60;
+				data->array_action[i].array_actionFrame[j].delayTime = 100;
 			}
 		}
 	}
